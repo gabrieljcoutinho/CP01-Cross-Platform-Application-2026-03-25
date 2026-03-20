@@ -1,19 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import LoadingScreen from './components/LoadingScreen'; // Importando o componente
+import { Text, View } from 'react-native';
+
+// Importações de componentes, hooks e estilos
+import LoadingScreen from './components/LoadingScreen';
+import { useAppLoader } from './hook/useAppLoader';
+import { styles } from './Css/styleApp';
 
 export default function App() {
-  const [isLoaded, setIsLoaded] = useState(false);
+  const isLoaded = useAppLoader(5000);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoaded(true);
-    }, 5000);
-    return () => clearTimeout(timer);
-  }, []);
-
-  // Se não carregou, exibe a LoadingScreen
   if (!isLoaded) {
     return (
       <>
@@ -23,7 +19,6 @@ export default function App() {
     );
   }
 
-  // App principal após os 5 segundos
   return (
     <View style={styles.container}>
       <Text style={styles.mainLabel}>OLA</Text>
@@ -31,17 +26,3 @@ export default function App() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  mainLabel: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#000',
-  },
-});
