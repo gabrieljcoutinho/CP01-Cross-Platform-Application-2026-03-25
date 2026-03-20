@@ -4,94 +4,157 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 const { width, height } = Dimensions.get('window');
 
+// Css da responsividade desse componente
+const isSmall = width < 380;
+
 export const Container = styled.View`
   flex: 1;
-  padding-horizontal: ${width * 0.08}px;
+  background-color: #020b1a;
+`;
+
+export const MainBackground = styled(LinearGradient)`
+  position: absolute;
+  inset: 0;
+`;
+
+export const GridOverlay = styled.View`
+  position: absolute;
+  inset: 0;
+  opacity: 0.15;
+  background-size: 40px 40px;
+  border-left-width: 1px;
+  border-color: #00d2ff;
+  border-style: solid;
+`;
+
+export const HeaderSection = styled.View`
+  padding-top: ${height * 0.08}px;
+  padding-horizontal: 30px;
+  margin-bottom: 30px;
+`;
+
+export const TitleMain = styled.Text`
+  color: #00d2ff;
+  font-size: 16px;
+  font-weight: 200;
+  letter-spacing: 12px;
+  text-shadow: 0px 0px 10px rgba(0, 210, 255, 0.8);
+`;
+
+export const TitleSub = styled.Text`
+  color: #ffffff;
+  font-size: 52px;
+  font-weight: 900;
+  margin-top: -5px;
+  letter-spacing: -2px;
+`;
+
+export const StatusRow = styled.View`
+  flex-direction: row;
+  align-items: center;
+  margin-top: 15px;
+`;
+
+export const StatusPulse = styled.View`
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  background-color: #00ff88;
+  margin-right: 10px;
+  shadow-color: #00ff88;
+  shadow-opacity: 1;
+  shadow-radius: 10px;
+  elevation: 10;
+`;
+
+export const SystemText = styled.Text`
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 10px;
+  letter-spacing: 2px;
+`;
+
+export const ScrollArea = styled.ScrollView`
+  flex: 1;
+  padding-horizontal: 25px;
+`;
+
+export const MenuGrid = styled.View`
+  gap: 25px;
+  padding-bottom: 50px;
+`;
+
+export const ButtonContainer = styled.View`
+  height: ${isSmall ? '100px' : '120px'};
+  width: 100%;
+  position: relative;
+`;
+
+export const GlowLayer = styled(Animated.View)`
+  position: absolute;
+  inset: -2px;
+  background-color: #00d2ff;
+  border-radius: 24px;
+  opacity: 0.3;
+`;
+
+export const GlassCard = styled.View`
+  flex: 1;
+  background-color: rgba(255, 255, 255, 0.08);
+  border-radius: 22px;
+  border-width: 1px;
+  border-color: rgba(255, 255, 255, 0.2);
+  overflow: hidden;
   justify-content: center;
 `;
 
-export const BackgroundGradient = styled(LinearGradient).attrs({
-  colors: ['#000428', '#004e92', '#000428'],
-})`
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-`;
-
-export const Header = styled.View`
-  margin-bottom: ${height * 0.05}px;
-`;
-
-export const TitleText = styled.Text`
-  color: #00d2ff;
-  font-size: ${width * 0.045}px;
-  font-weight: 300;
-  letter-spacing: 8px;
-  text-transform: uppercase;
-`;
-
-export const SubtitleText = styled.Text`
-  color: #ffffff;
-  font-size: ${width * 0.14}px;
-  font-weight: 900;
-  line-height: ${width * 0.15}px;
-`;
-
-export const NeonDivider = styled.View`
-  width: 80px;
-  height: 6px;
-  background-color: #00d2ff;
-  margin-top: 12px;
-  border-radius: 3px;
-  box-shadow: 0px 0px 10px #00d2ff;
-  elevation: 15;
-`;
-
-export const MenuContainer = styled.View`
-  gap: 20px;
-`;
-
-export const ButtonWrapper = styled.View`
-  width: 100%;
-  border-radius: 20px;
-  border-width: 1.5px;
-  border-color: rgba(255, 255, 255, 0.25);
-  overflow: hidden;
-  background-color: rgba(255, 255, 255, 0.03);
-`;
-
-export const RoomGradient = styled(LinearGradient).attrs({
-  colors: ['rgba(255, 255, 255, 0.18)', 'rgba(255, 255, 255, 0.02)'],
-  start: { x: 0, y: 0 },
-  end: { x: 1, y: 1 },
-})`
-  padding-vertical: ${height * 0.03}px;
-  padding-horizontal: 25px;
-  align-items: center;
+export const CardContent = styled.View`
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
+  padding-horizontal: 30px;
+`;
+
+export const RoomIndex = styled.Text`
+  color: #00d2ff;
+  font-size: 12px;
+  font-weight: 800;
+  opacity: 0.8;
 `;
 
 export const RoomLabel = styled.Text`
   color: #ffffff;
-  font-size: ${width * 0.045}px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-top: 2px;
 `;
 
-export const StatusGlow = styled.View`
-  width: 12px;
-  height: 12px;
-  border-radius: 6px;
+export const ActionCircle = styled.View`
+  width: 45px;
+  height: 45px;
+  border-radius: 22.5px;
+  border-width: 1px;
+  border-color: #00d2ff;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const InnerCircle = styled.View`
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
   background-color: #00d2ff;
-  box-shadow: 0px 0px 12px #00d2ff;
-  elevation: 12;
+  shadow-color: #00d2ff;
+  shadow-radius: 8px;
+  shadow-opacity: 1;
+  elevation: 8;
 `;
 
-// Css da responsividade desse componente (Auxiliar)
-export const ResponsiveContainer = styled.View`
-  flex-direction: column;
-  padding: ${width < 380 ? '10px' : '20px'};
+export const ScanningLine = styled.View`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: rgba(0, 210, 255, 0.4);
 `;
