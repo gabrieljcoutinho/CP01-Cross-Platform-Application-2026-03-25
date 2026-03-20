@@ -5,21 +5,21 @@ import RoomSelectionScreen from './pages/SelecionandoAsala.js';
 import { useAppLoader } from './hook/useAppLoader';
 
 export default function App() {
-  const isLoaded = useAppLoader(5000);
+  const isLoaded = useAppLoader(5000);
 
-  if (!isLoaded) {
-    return (
-      <>
-        <LoadingScreen />
-        <StatusBar style="light" />
-      </>
-    );
-  }
+  if (!isLoaded) {
+    return (
+      <>
+        <LoadingScreen />
+        <StatusBar style="light" />
+      </>
+    );
+  }
 
-  return (
-    <>
-      <RoomSelectionScreen />
-      <StatusBar style="light" />
-    </>
-  );
+  return (
+    <>
+      <RoomSelectionScreen />
+      <StatusBar style="light" />
+    </>
+  );
 }
