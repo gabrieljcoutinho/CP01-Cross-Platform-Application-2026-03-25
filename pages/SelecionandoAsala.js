@@ -49,11 +49,11 @@ const FloorButton = ({ level, sectors, index }) => {
             <S.CardContent>
               <S.LevelIndicator>
                 <S.LevelNumber>{level}</S.LevelNumber>
-                <S.LevelUnit>ST</S.LevelUnit>
+                <S.LevelUnit>ANDAR</S.LevelUnit>
               </S.LevelIndicator>
 
               <S.InfoArea>
-                <S.RoomIndex>PAULISTA_NODE_0{level}</S.RoomIndex>
+                <S.RoomIndex>Unidade Paulista</S.RoomIndex>
                 <S.RoomLabel>Andar {level}º</S.RoomLabel>
                 <S.TechStatus>{sectors}</S.TechStatus>
               </S.InfoArea>
