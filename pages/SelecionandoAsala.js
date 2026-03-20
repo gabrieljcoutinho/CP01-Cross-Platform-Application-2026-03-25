@@ -55,7 +55,7 @@ const RoomButton = ({ title, index, status }) => {
             <S.ScanningLine style={{ transform: [{ translateY: scanY }] }} />
             <S.CardContent>
               <View>
-                <S.RoomIndex>HUB_UNIT_0{index + 1}</S.RoomIndex>
+                <S.RoomIndex>Andar FIAp - Paulista {index + 1}</S.RoomIndex>
                 <S.RoomLabel>{title}</S.RoomLabel>
                 <S.TechStatus>{status || 'OPERATIONAL'}</S.TechStatus>
               </View>
