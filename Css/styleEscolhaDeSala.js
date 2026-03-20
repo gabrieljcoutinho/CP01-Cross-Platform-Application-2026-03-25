@@ -3,8 +3,6 @@ import { Dimensions, Animated } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 const { width, height } = Dimensions.get('window');
-
-// Css da responsividade desse componente
 const isSmall = width < 380;
 
 export const Container = styled.View`
@@ -14,17 +12,21 @@ export const Container = styled.View`
 
 export const MainBackground = styled(LinearGradient)`
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 `;
 
 export const GridOverlay = styled.View`
   position: absolute;
-  inset: 0;
-  opacity: 0.15;
-  background-size: 40px 40px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.1;
   border-left-width: 1px;
   border-color: #00d2ff;
-  border-style: solid;
 `;
 
 export const HeaderSection = styled.View`
@@ -33,12 +35,15 @@ export const HeaderSection = styled.View`
   margin-bottom: 30px;
 `;
 
+export const GlitchContainer = styled.View`
+  position: relative;
+`;
+
 export const TitleMain = styled.Text`
   color: #00d2ff;
   font-size: 16px;
   font-weight: 200;
   letter-spacing: 12px;
-  text-shadow: 0px 0px 10px rgba(0, 210, 255, 0.8);
 `;
 
 export const TitleSub = styled.Text`
@@ -61,10 +66,6 @@ export const StatusPulse = styled.View`
   border-radius: 4px;
   background-color: #00ff88;
   margin-right: 10px;
-  shadow-color: #00ff88;
-  shadow-opacity: 1;
-  shadow-radius: 10px;
-  elevation: 10;
 `;
 
 export const SystemText = styled.Text`
@@ -91,10 +92,12 @@ export const ButtonContainer = styled.View`
 
 export const GlowLayer = styled(Animated.View)`
   position: absolute;
-  inset: -2px;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
   background-color: #00d2ff;
   border-radius: 24px;
-  opacity: 0.3;
 `;
 
 export const GlassCard = styled.View`
@@ -126,7 +129,6 @@ export const RoomLabel = styled.Text`
   font-size: 20px;
   font-weight: 600;
   letter-spacing: 1px;
-  margin-top: 2px;
 `;
 
 export const ActionCircle = styled.View`
@@ -144,10 +146,6 @@ export const InnerCircle = styled.View`
   height: 10px;
   border-radius: 5px;
   background-color: #00d2ff;
-  shadow-color: #00d2ff;
-  shadow-radius: 8px;
-  shadow-opacity: 1;
-  elevation: 8;
 `;
 
 export const ScanningLine = styled.View`
