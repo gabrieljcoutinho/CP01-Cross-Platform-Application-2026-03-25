@@ -82,12 +82,10 @@ export default function RoomSelectionScreen() {
 
       <S.HeaderSection>
         <S.GlitchContainer>
-          <S.TitleMain>FIAP SMART</S.TitleMain>
-          <S.TitleSub>CAMPUS</S.TitleSub>
+          <S.TitleMain>FIAP MUSIC</S.TitleMain>
+          <S.TitleSub>Paulista</S.TitleSub>
         </S.GlitchContainer>
         <S.StatusRow>
-          <S.StatusPulse />
-          <S.SystemText>CONNECTED TO NEXT_GEN_NETWORK</S.SystemText>
         </S.StatusRow>
       </S.HeaderSection>
 

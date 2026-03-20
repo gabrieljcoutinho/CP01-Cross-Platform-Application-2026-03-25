@@ -65,13 +65,6 @@ export const StatusPulse = styled.View`
   box-shadow: 0px 0px 8px #ed145b;
 `;
 
-export const SystemText = styled.Text`
-  color: rgba(255, 255, 255, 0.4);
-  font-size: 9px;
-  letter-spacing: 1.5px;
-  margin-left: 10px;
-`;
-
 export const ScrollArea = styled.ScrollView`
   flex: 1;
 `;
