@@ -3,156 +3,158 @@ import { Dimensions, Animated } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 const { width, height } = Dimensions.get('window');
-const isSmall = width < 380;
 
 export const Container = styled.View`
   flex: 1;
-  background-color: #020b1a;
+  background-color: #000;
 `;
 
 export const MainBackground = styled(LinearGradient)`
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
 `;
 
 export const GridOverlay = styled.View`
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  opacity: 0.1;
+  inset: 0;
+  opacity: 0.05;
   border-left-width: 1px;
-  border-color: #00d2ff;
+  border-right-width: 1px;
+  border-color: #ed145b;
 `;
 
 export const HeaderSection = styled.View`
-  padding-top: ${height * 0.08}px;
-  padding-horizontal: 30px;
-  margin-bottom: 30px;
+  padding-top: ${height * 0.07}px;
+  padding-horizontal: 25px;
+  margin-bottom: 20px;
 `;
 
 export const GlitchContainer = styled.View`
-  position: relative;
+  border-left-width: 4px;
+  border-left-color: #ed145b;
+  padding-left: 15px;
 `;
 
 export const TitleMain = styled.Text`
-  color: #00d2ff;
-  font-size: 16px;
-  font-weight: 200;
-  letter-spacing: 12px;
+  color: #ed145b;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 5px;
 `;
 
 export const TitleSub = styled.Text`
   color: #ffffff;
-  font-size: 52px;
+  font-size: 58px;
   font-weight: 900;
-  margin-top: -5px;
+  line-height: 60px;
   letter-spacing: -2px;
 `;
 
 export const StatusRow = styled.View`
   flex-direction: row;
   align-items: center;
-  margin-top: 15px;
+  margin-top: 10px;
+  padding-left: 20px;
 `;
 
 export const StatusPulse = styled.View`
-  width: 8px;
-  height: 8px;
-  border-radius: 4px;
-  background-color: #00ff88;
-  margin-right: 10px;
+  width: 6px;
+  height: 6px;
+  border-radius: 3px;
+  background-color: #ed145b;
+  box-shadow: 0px 0px 8px #ed145b;
 `;
 
 export const SystemText = styled.Text`
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 10px;
-  letter-spacing: 2px;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  margin-left: 10px;
 `;
 
 export const ScrollArea = styled.ScrollView`
   flex: 1;
-  padding-horizontal: 25px;
 `;
 
 export const MenuGrid = styled.View`
-  gap: 25px;
-  padding-bottom: 50px;
+  padding: 25px;
+  gap: 20px;
 `;
 
 export const ButtonContainer = styled.View`
-  height: ${isSmall ? '100px' : '120px'};
+  height: 110px;
   width: 100%;
-  position: relative;
 `;
 
 export const GlowLayer = styled(Animated.View)`
   position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  background-color: #00d2ff;
-  border-radius: 24px;
+  inset: -1px;
+  background-color: #ed145b;
+  border-radius: 12px;
+  opacity: 0.5;
 `;
 
 export const GlassCard = styled.View`
   flex: 1;
-  background-color: rgba(255, 255, 255, 0.08);
-  border-radius: 22px;
+  background-color: #111;
+  border-radius: 10px;
   border-width: 1px;
-  border-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(237, 20, 91, 0.3);
   overflow: hidden;
-  justify-content: center;
 `;
 
 export const CardContent = styled.View`
+  flex: 1;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding-horizontal: 30px;
+  padding-horizontal: 25px;
 `;
 
 export const RoomIndex = styled.Text`
-  color: #00d2ff;
-  font-size: 12px;
-  font-weight: 800;
-  opacity: 0.8;
+  color: #ed145b;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 2px;
 `;
 
 export const RoomLabel = styled.Text`
   color: #ffffff;
-  font-size: 20px;
+  font-size: 22px;
+  font-weight: 700;
+  text-transform: uppercase;
+`;
+
+export const TechStatus = styled.Text`
+  color: #00ff88;
+  font-size: 9px;
   font-weight: 600;
   letter-spacing: 1px;
+  opacity: 0.7;
 `;
 
 export const ActionCircle = styled.View`
-  width: 45px;
-  height: 45px;
-  border-radius: 22.5px;
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
   border-width: 1px;
-  border-color: #00d2ff;
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: rotate(45deg);
   align-items: center;
   justify-content: center;
 `;
 
 export const InnerCircle = styled.View`
-  width: 10px;
-  height: 10px;
-  border-radius: 5px;
-  background-color: #00d2ff;
+  width: 8px;
+  height: 8px;
+  background-color: #ed145b;
 `;
 
-export const ScanningLine = styled.View`
+export const ScanningLine = styled(Animated.View)`
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background-color: rgba(0, 210, 255, 0.4);
+  width: 100%;
+  height: 40px;
+  background-color: rgba(237, 20, 91, 0.05);
+  border-bottom-width: 1px;
+  border-bottom-color: rgba(237, 20, 91, 0.5);
 `;
