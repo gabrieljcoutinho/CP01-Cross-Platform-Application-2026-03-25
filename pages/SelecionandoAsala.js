@@ -2,26 +2,24 @@ import React, { useEffect, useRef } from 'react';
 import { Animated, TouchableWithoutFeedback, View, Easing } from 'react-native';
 import * as S from '../Css/styleEscolhaDeSala';
 
-const RoomButton = ({ title, index, status }) => {
+const FloorButton = ({ level, sectors, index }) => {
   const animatedValue = useRef(new Animated.Value(0)).current;
   const hoverValue = useRef(new Animated.Value(0)).current;
   const scanAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    // Entrada em cascata
     Animated.timing(animatedValue, {
       toValue: 1,
-      duration: 800,
-      delay: index * 150,
+      duration: 600,
+      delay: index * 100,
       useNativeDriver: true,
-      easing: Easing.out(Easing.back(1.5)),
+      easing: Easing.out(Easing.quad),
     }).start();
 
-    // Animação infinita de Scan
     Animated.loop(
       Animated.timing(scanAnim, {
         toValue: 1,
-        duration: 3000,
+        duration: 2500,
         easing: Easing.linear,
         useNativeDriver: true,
       })
@@ -29,36 +27,37 @@ const RoomButton = ({ title, index, status }) => {
   }, []);
 
   const onPressIn = () => {
-    Animated.spring(hoverValue, { toValue: 1, useNativeDriver: true, tension: 50 }).start();
+    Animated.spring(hoverValue, { toValue: 1, useNativeDriver: true }).start();
   };
 
   const onPressOut = () => {
     Animated.spring(hoverValue, { toValue: 0, useNativeDriver: true }).start();
   };
 
-  const translateY = animatedValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: [100, 0],
-  });
-
   const scanY = scanAnim.interpolate({
     inputRange: [0, 1],
-    outputRange: [-20, 140],
+    outputRange: [-30, 120],
   });
 
   return (
-    <Animated.View style={{ opacity: animatedValue, transform: [{ translateY }] }}>
+    <Animated.View style={{ opacity: animatedValue, transform: [{ scale: animatedValue }] }}>
       <TouchableWithoutFeedback onPressIn={onPressIn} onPressOut={onPressOut}>
         <S.ButtonContainer>
           <S.GlowLayer style={{ opacity: hoverValue }} />
           <S.GlassCard>
             <S.ScanningLine style={{ transform: [{ translateY: scanY }] }} />
             <S.CardContent>
-              <View>
-                <S.RoomIndex> Paulista - FIAP Andar {index + 1}</S.RoomIndex>
-                <S.RoomLabel>{title}</S.RoomLabel>
-                <S.TechStatus>{status || 'OPERATIONAL'}</S.TechStatus>
-              </View>
+              <S.LevelIndicator>
+                <S.LevelNumber>{level}</S.LevelNumber>
+                <S.LevelUnit>ST</S.LevelUnit>
+              </S.LevelIndicator>
+
+              <S.InfoArea>
+                <S.RoomIndex>PAULISTA_NODE_0{level}</S.RoomIndex>
+                <S.RoomLabel>Andar {level}º</S.RoomLabel>
+                <S.TechStatus>{sectors}</S.TechStatus>
+              </S.InfoArea>
+
               <S.ActionCircle>
                 <S.InnerCircle />
               </S.ActionCircle>
@@ -74,28 +73,29 @@ export default function RoomSelectionScreen() {
   return (
     <S.Container>
       <S.MainBackground
-        colors={['#000000', '#0a0a0f', '#ed145b20']} // Toque de vermelho FIAP no fundo
+        colors={['#000000', '#08080c', '#ed145b10']}
         start={{ x: 0.5, y: 0 }}
         end={{ x: 0.5, y: 1 }}
       />
-      <S.GridOverlay />
 
       <S.HeaderSection>
         <S.GlitchContainer>
-          <S.TitleMain>FIAP MUSIC</S.TitleMain>
-          <S.TitleSub>Paulista</S.TitleSub>
+          <S.TitleMain>SELECT LEVEL</S.TitleMain>
+          <S.TitleSub>PAULISTA</S.TitleSub>
         </S.GlitchContainer>
         <S.StatusRow>
+          <S.StatusPulse />
+          <S.SystemText>SISTEMA DE ACESSO POR ANDAR</S.SystemText>
         </S.StatusRow>
       </S.HeaderSection>
 
       <S.ScrollArea showsVerticalScrollIndicator={false}>
         <S.MenuGrid>
-          <RoomButton title="INNOVATION LAB" index={0} status="READY" />
-          <RoomButton title="ROBOTICS HUB" index={1} status="ACTIVE" />
-          <RoomButton title="CYBER SECURITY" index={2} status="SECURE" />
-          <RoomButton title="MAKER SPACE" index={3} status="OPEN" />
-          <RoomButton title="COGNITIVE HALL" index={4} status="READY" />
+          <FloorButton level={1} index={0} sectors="ADM / CO-WORKING / TECH" />
+          <FloorButton level={2} index={1} sectors="CYBERSECURITY / DEV / IA" />
+          <FloorButton level={3} index={2} sectors="ROBOTICS / ENGINEERING" />
+          <FloorButton level={4} index={3} sectors="GAME DEV / DESIGN HUB" />
+          <FloorButton level={5} index={4} sectors="MASTER LAB / POST-GRAD" />
         </S.MenuGrid>
       </S.ScrollArea>
     </S.Container>
