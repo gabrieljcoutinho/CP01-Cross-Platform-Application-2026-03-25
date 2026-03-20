@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Animated, TouchableWithoutFeedback, View, Easing } from 'react-native';
+import { Animated, TouchableWithoutFeedback, Easing } from 'react-native';
 import * as S from '../Css/styleEscolhaDeSala';
 
 const FloorButton = ({ level, sectors, index }) => {

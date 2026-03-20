@@ -11,10 +11,7 @@ export const Container = styled.View`
 
 export const MainBackground = styled(LinearGradient)`
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  top: 0; left: 0; right: 0; bottom: 0;
 `;
 
 export const HeaderSection = styled.View`
@@ -79,10 +76,7 @@ export const ButtonContainer = styled.View`
 
 export const GlowLayer = styled(Animated.View)`
   position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
+  top: -2px; left: -2px; right: -2px; bottom: -2px;
   background-color: #ed145b;
   border-radius: 4px;
 `;
