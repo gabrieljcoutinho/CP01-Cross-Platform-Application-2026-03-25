@@ -1,50 +1,75 @@
 import React, { useEffect, useRef } from 'react';
-import { Animated, TouchableWithoutFeedback, Easing } from 'react-native';
+import { Animated, TouchableWithoutFeedback, Easing, Dimensions } from 'react-native';
 import * as S from '../Css/styleEscolhaDeSala';
 
-const FloorButton = ({ level, sectors, index }) => {
+const { width } = Dimensions.get('window');
+
+const FloorButton = ({ level, index }) => {
   const animatedValue = useRef(new Animated.Value(0)).current;
   const hoverValue = useRef(new Animated.Value(0)).current;
+  const pressScale = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
     Animated.timing(animatedValue, {
       toValue: 1,
-      duration: 600,
-      delay: index * 100,
+      duration: 800,
+      delay: index * 120,
       useNativeDriver: true,
-      easing: Easing.out(Easing.quad),
+      easing: Easing.bezier(0.2, 0, 0, 1),
     }).start();
   }, []);
 
   const onPressIn = () => {
-    Animated.spring(hoverValue, { toValue: 1, useNativeDriver: true }).start();
+    Animated.parallel([
+      Animated.spring(hoverValue, { toValue: 1, useNativeDriver: true }),
+      Animated.spring(pressScale, { toValue: 0.94, useNativeDriver: true })
+    ]).start();
   };
 
   const onPressOut = () => {
-    Animated.spring(hoverValue, { toValue: 0, useNativeDriver: true }).start();
+    Animated.parallel([
+      Animated.spring(hoverValue, { toValue: 0, useNativeDriver: true }),
+      Animated.spring(pressScale, { toValue: 1, useNativeDriver: true })
+    ]).start();
   };
 
   return (
-    <Animated.View style={{ opacity: animatedValue, transform: [{ scale: animatedValue }] }}>
+    <Animated.View
+      style={{
+        opacity: animatedValue,
+        transform: [
+          { scale: pressScale },
+          { translateY: animatedValue.interpolate({
+              inputRange: [0, 1],
+              outputRange: [60, 0]
+            })
+          }
+        ]
+      }}
+    >
       <TouchableWithoutFeedback onPressIn={onPressIn} onPressOut={onPressOut}>
         <S.ButtonContainer>
-          <S.GlowLayer style={{ opacity: hoverValue }} />
+          <S.GlowLayer style={{
+            opacity: hoverValue.interpolate({
+              inputRange: [0, 1],
+              outputRange: [0, 0.4]
+            })
+          }} />
           <S.GlassCard>
+            <S.ScanLine style={{
+              transform: [{
+                translateX: hoverValue.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [-width, 0]
+                })
+              }]
+            }} />
             <S.CardContent>
-              <S.LevelIndicator>
-                <S.LevelNumber>{level}</S.LevelNumber>
-                <S.LevelUnit>ANDAR</S.LevelUnit>
-              </S.LevelIndicator>
-
               <S.InfoArea>
                 <S.RoomIndex>Unidade Paulista</S.RoomIndex>
                 <S.RoomLabel>Andar {level}º</S.RoomLabel>
-                <S.TechStatus>{sectors}</S.TechStatus>
               </S.InfoArea>
-
-              <S.ActionCircle>
-                <S.InnerCircle />
-              </S.ActionCircle>
+              {/* O bloco LevelDisplay (número grande e linha) foi removido daqui */}
             </S.CardContent>
           </S.GlassCard>
         </S.ButtonContainer>
@@ -54,6 +79,8 @@ const FloorButton = ({ level, sectors, index }) => {
 };
 
 export default function RoomSelectionScreen() {
+  const data = [1, 2, 3, 4, 5, 6, 7];
+
   return (
     <S.Container>
       <S.MainBackground
@@ -73,13 +100,19 @@ export default function RoomSelectionScreen() {
         </S.StatusRow>
       </S.HeaderSection>
 
-      <S.ScrollArea showsVerticalScrollIndicator={false}>
+      <S.ScrollArea
+        showsVerticalScrollIndicator={true}
+        persistentScrollbar={true}
+        indicatorStyle="white"
+      >
         <S.MenuGrid>
-          <FloorButton level={1} index={0} sectors="ADM / CO-WORKING / TECH" />
-          <FloorButton level={2} index={1} sectors="CYBERSECURITY / DEV / IA" />
-          <FloorButton level={3} index={2} sectors="ROBOTICS / ENGINEERING" />
-          <FloorButton level={4} index={3} sectors="GAME DEV / DESIGN HUB" />
-          <FloorButton level={5} index={4} sectors="MASTER LAB / POST-GRAD" />
+          {data.map((level, index) => (
+            <FloorButton
+              key={level}
+              level={level}
+              index={index}
+            />
+          ))}
         </S.MenuGrid>
       </S.ScrollArea>
     </S.Container>
