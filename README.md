@@ -1,7 +1,7 @@
 <table align="center">
   <tr>
     <td>
-      <img src="https://github.com/user-attachments/assets/1c116e07-dd6b-4728-82a3-096287ced3e0" width="160">
+      <img width="160" alt="Image" src="https://github.com/user-attachments/assets/84424fbf-3d04-4834-8170-501b731746f5" />
     </td>
     <td style="padding-left: 15px;">
       <h1 style="margin: 0;">FIAP MUSIC</h1>
@@ -125,5 +125,5 @@ export const useAppLoader = (duration = 5000) => {
 ##
 <p align="center">
   <em>Desenvolvido por:</em><br>
-  <em>Pedro Lisboa, Felipe Rodrigues, Gabriel Jorge Coutinho, Bruna Marques e Queiroz, Manoela Oliveira Bello</em>
+  <em>Pedro Lisboa, Felipe Rodrigues Ribeiro dos Santos, Gabriel Jorge Coutinho, Bruna Marques e Queiroz, Manoela Oliveira Bello</em>
 </p>
