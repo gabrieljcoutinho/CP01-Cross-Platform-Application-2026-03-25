@@ -1,6 +1,7 @@
 import { StyleSheet, Dimensions } from 'react-native';
 
 const { width } = Dimensions.get('window');
+const isMobile = width < 768;
 
 export const styles = StyleSheet.create({
   loaderContainer: {
@@ -10,22 +11,20 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   logoWrapper: {
-    position: 'relative',
     alignItems: 'center',
     justifyContent: 'center',
     width: 200,
     height: 200,
   },
   logoImg: {
-    width: 180,
-    height: 180,
+    width: isMobile ? 150 : 180,
+    height: isMobile ? 150 : 180,
     borderRadius: 40,
     zIndex: 2,
   },
   audioPulse: {
     position: 'absolute',
-    width: 200,
-    height: 200,
+    inset: 0, // Atalho para top, bottom, left, right: 0
     borderWidth: 2,
     borderColor: '#ff007a',
     borderRadius: 45,
@@ -36,7 +35,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   glitchText: {
-    fontSize: 24,
+    fontSize: isMobile ? 20 : 24,
     fontWeight: 'bold',
     letterSpacing: 5,
     textAlign: 'center',
@@ -52,7 +51,6 @@ export const styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'center',
     width: 120,
-    height: 100,
     marginTop: 30,
   },
   digit: {
@@ -62,11 +60,8 @@ export const styles = StyleSheet.create({
     marginHorizontal: 5,
     textShadowColor: '#00ff88',
     textShadowRadius: 10,
-  },
+  }
 
   /* Css da responsividade desse componente */
-  ...(width < 768 ? {
-    logoImg: { width: 150, height: 150 },
-    glitchText: { fontSize: 20 },
-  } : {})
+  // Otimizado via variáveis ternárias diretamente nas propriedades
 });
