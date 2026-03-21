@@ -5,6 +5,7 @@ import * as S from '../Css/styleEscolhaDeSala';
 const FloorButton = ({ level, sectors, index }) => {
   const animatedValue = useRef(new Animated.Value(0)).current;
   const hoverValue = useRef(new Animated.Value(0)).current;
+  const scanAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     Animated.timing(animatedValue, {
@@ -14,40 +15,37 @@ const FloorButton = ({ level, sectors, index }) => {
       useNativeDriver: true,
       easing: Easing.out(Easing.quad),
     }).start();
+
+    Animated.loop(
+      Animated.timing(scanAnim, {
+        toValue: 1,
+        duration: 2500,
+        easing: Easing.linear,
+        useNativeDriver: true,
+      })
+    ).start();
   }, []);
 
   const onPressIn = () => {
-    Animated.spring(hoverValue, {
-      toValue: 1,
-      friction: 4,
-      tension: 40,
-      useNativeDriver: true
-    }).start();
+    Animated.spring(hoverValue, { toValue: 1, useNativeDriver: true }).start();
   };
 
   const onPressOut = () => {
-    Animated.spring(hoverValue, {
-      toValue: 0,
-      friction: 4,
-      tension: 40,
-      useNativeDriver: true
-    }).start();
+    Animated.spring(hoverValue, { toValue: 0, useNativeDriver: true }).start();
   };
 
-  const scale = hoverValue.interpolate({
+  const scanY = scanAnim.interpolate({
     inputRange: [0, 1],
-    outputRange: [1, 0.96],
+    outputRange: [-30, 120],
   });
 
   return (
-    <Animated.View style={{
-      opacity: animatedValue,
-      transform: [{ scale: Animated.multiply(animatedValue, scale) }]
-    }}>
+    <Animated.View style={{ opacity: animatedValue, transform: [{ scale: animatedValue }] }}>
       <TouchableWithoutFeedback onPressIn={onPressIn} onPressOut={onPressOut}>
         <S.ButtonContainer>
           <S.GlowLayer style={{ opacity: hoverValue }} />
           <S.GlassCard>
+            <S.ScanningLine style={{ transform: [{ translateY: scanY }] }} />
             <S.CardContent>
               <S.LevelIndicator>
                 <S.LevelNumber>{level}</S.LevelNumber>
@@ -61,12 +59,7 @@ const FloorButton = ({ level, sectors, index }) => {
               </S.InfoArea>
 
               <S.ActionCircle>
-                <S.InnerCircle style={{
-                  transform: [{ scale: hoverValue.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [1, 2.5]
-                  }) }]
-                }} />
+                <S.InnerCircle />
               </S.ActionCircle>
             </S.CardContent>
           </S.GlassCard>
@@ -103,8 +96,6 @@ export default function RoomSelectionScreen() {
           <FloorButton level={3} index={2} sectors="ROBOTICS / ENGINEERING" />
           <FloorButton level={4} index={3} sectors="GAME DEV / DESIGN HUB" />
           <FloorButton level={5} index={4} sectors="MASTER LAB / POST-GRAD" />
-          <FloorButton level={6} index={5} sectors="SCIENCE COMPUTER" />
-          <FloorButton level={7} index={6} sectors="SOFTWARE ENGINEER " />
         </S.MenuGrid>
       </S.ScrollArea>
     </S.Container>

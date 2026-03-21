@@ -64,9 +64,8 @@ export const ScrollArea = styled.ScrollView`
   flex: 1;
 `;
 
-// Css da responsividade desse componente
 export const MenuGrid = styled.View`
-  padding: ${width * 0.06}px;
+  padding: 25px;
   gap: 15px;
 `;
 
@@ -80,11 +79,6 @@ export const GlowLayer = styled(Animated.View)`
   top: -2px; left: -2px; right: -2px; bottom: -2px;
   background-color: #ed145b;
   border-radius: 4px;
-  shadow-color: #ed145b;
-  shadow-offset: 0px 0px;
-  shadow-opacity: 0.8;
-  shadow-radius: 10px;
-  elevation: 10;
 `;
 
 export const GlassCard = styled.View`
@@ -92,6 +86,7 @@ export const GlassCard = styled.View`
   background-color: #080808;
   border-width: 1px;
   border-color: rgba(237, 20, 91, 0.5);
+  overflow: hidden;
 `;
 
 export const CardContent = styled.View`
@@ -157,8 +152,18 @@ export const ActionCircle = styled.View`
   justify-content: center;
 `;
 
-export const InnerCircle = styled(Animated.View)`
+export const InnerCircle = styled.View`
   width: 6px;
   height: 6px;
   background-color: #ed145b;
+`;
+
+export const ScanningLine = styled(Animated.View)`
+  position: absolute;
+  width: 100%;
+  height: 20px;
+  background-color: rgba(237, 20, 91, 0.1);
+  border-bottom-width: 1px;
+  border-bottom-color: #ed145b;
+  z-index: 10;
 `;
