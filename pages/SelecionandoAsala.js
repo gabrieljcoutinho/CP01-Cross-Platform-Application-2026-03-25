@@ -5,7 +5,6 @@ import * as S from '../Css/styleEscolhaDeSala';
 const FloorButton = ({ level, sectors, index }) => {
   const animatedValue = useRef(new Animated.Value(0)).current;
   const hoverValue = useRef(new Animated.Value(0)).current;
-  const scanAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     Animated.timing(animatedValue, {
@@ -15,15 +14,6 @@ const FloorButton = ({ level, sectors, index }) => {
       useNativeDriver: true,
       easing: Easing.out(Easing.quad),
     }).start();
-
-    Animated.loop(
-      Animated.timing(scanAnim, {
-        toValue: 1,
-        duration: 2500,
-        easing: Easing.linear,
-        useNativeDriver: true,
-      })
-    ).start();
   }, []);
 
   const onPressIn = () => {
@@ -34,18 +24,12 @@ const FloorButton = ({ level, sectors, index }) => {
     Animated.spring(hoverValue, { toValue: 0, useNativeDriver: true }).start();
   };
 
-  const scanY = scanAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [-30, 120],
-  });
-
   return (
     <Animated.View style={{ opacity: animatedValue, transform: [{ scale: animatedValue }] }}>
       <TouchableWithoutFeedback onPressIn={onPressIn} onPressOut={onPressOut}>
         <S.ButtonContainer>
           <S.GlowLayer style={{ opacity: hoverValue }} />
           <S.GlassCard>
-            <S.ScanningLine style={{ transform: [{ translateY: scanY }] }} />
             <S.CardContent>
               <S.LevelIndicator>
                 <S.LevelNumber>{level}</S.LevelNumber>

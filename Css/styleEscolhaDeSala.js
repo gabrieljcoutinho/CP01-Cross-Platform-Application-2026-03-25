@@ -157,13 +157,3 @@ export const InnerCircle = styled.View`
   height: 6px;
   background-color: #ed145b;
 `;
-
-export const ScanningLine = styled(Animated.View)`
-  position: absolute;
-  width: 100%;
-  height: 20px;
-  background-color: rgba(237, 20, 91, 0.1);
-  border-bottom-width: 1px;
-  border-bottom-color: #ed145b;
-  z-index: 10;
-`;
