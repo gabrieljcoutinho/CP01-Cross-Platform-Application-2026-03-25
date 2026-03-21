@@ -103,6 +103,8 @@ export default function RoomSelectionScreen() {
           <FloorButton level={3} index={2} sectors="ROBOTICS / ENGINEERING" />
           <FloorButton level={4} index={3} sectors="GAME DEV / DESIGN HUB" />
           <FloorButton level={5} index={4} sectors="MASTER LAB / POST-GRAD" />
+          <FloorButton level={6} index={5} sectors="SCIENCE COMPUTER" />
+          <FloorButton level={7} index={6} sectors="SOFTWARE ENGINEER " />
         </S.MenuGrid>
       </S.ScrollArea>
     </S.Container>
