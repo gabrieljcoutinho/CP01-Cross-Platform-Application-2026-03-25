@@ -54,16 +54,8 @@ export default function LoginScreen({ onLogin }) {
         </S.LoginButton>
 
         <S.FooterLink>
-  <S.LinkItem activeOpacity={0.7} onPress={() => {}}>
-    <S.FooterText>Não tem conta? Registre-se</S.FooterText>
-    <S.LinkUnderline />
-  </S.LinkItem>
-
-  <S.LinkItem activeOpacity={0.7} onPress={() => {}}>
-    <S.FooterText>Esqueceu as credenciais de acesso?</S.FooterText>
-    <S.LinkUnderline />
-  </S.LinkItem>
-</S.FooterLink>
+          <S.FooterText>Esqueceu as credenciais de acesso?</S.FooterText>
+        </S.FooterLink>
       </S.ContentWrapper>
     </S.Container>
   );
