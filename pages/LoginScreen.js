@@ -22,7 +22,7 @@ export default function LoginScreen({ onLogin }) {
         start={{ x: 0.5, y: 0 }}
         end={{ x: 0.5, y: 1 }}
       />
-      
+
       <S.ContentWrapper behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <S.HeaderSection>
           <S.LoginSubtitle>System Access</S.LoginSubtitle>
@@ -31,7 +31,7 @@ export default function LoginScreen({ onLogin }) {
 
         <S.InputContainer>
           <S.Label>Usuário_ID</S.Label>
-          <S.StyledInput 
+          <S.StyledInput
             placeholder="Ex: admin_fiap"
             value={user}
             onChangeText={setUser}
@@ -41,7 +41,7 @@ export default function LoginScreen({ onLogin }) {
 
         <S.InputContainer>
           <S.Label>Password_Key</S.Label>
-          <S.StyledInput 
+          <S.StyledInput
             placeholder="••••••••"
             secureTextEntry
             value={password}
@@ -54,8 +54,16 @@ export default function LoginScreen({ onLogin }) {
         </S.LoginButton>
 
         <S.FooterLink>
-          <S.FooterText>Esqueceu as credenciais de acesso?</S.FooterText>
-        </S.FooterLink>
+  <S.LinkItem activeOpacity={0.7} onPress={() => {}}>
+    <S.FooterText>Não tem conta? Registre-se</S.FooterText>
+    <S.LinkUnderline />
+  </S.LinkItem>
+
+  <S.LinkItem activeOpacity={0.7} onPress={() => {}}>
+    <S.FooterText>Esqueceu as credenciais de acesso?</S.FooterText>
+    <S.LinkUnderline />
+  </S.LinkItem>
+</S.FooterLink>
       </S.ContentWrapper>
     </S.Container>
   );
