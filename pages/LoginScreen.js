@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Platform, Alert } from 'react-native';
 import * as S from '../Css/styleLogin';
 
-export default function LoginScreen({ onLogin }) {
+export default function LoginScreen({ onLogin, onGoToRegister }) {
   const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
 
@@ -11,7 +11,6 @@ export default function LoginScreen({ onLogin }) {
       Alert.alert("Acesso Negado", "Preencha todos os campos do sistema.");
       return;
     }
-    // Aqui você pode adicionar lógica de autenticação real
     onLogin();
   };
 
@@ -53,8 +52,8 @@ export default function LoginScreen({ onLogin }) {
           <S.ButtonText>Acessar Sistema</S.ButtonText>
         </S.LoginButton>
 
-        <S.FooterLink>
-          <S.FooterText>Esqueceu as credenciais de acesso?</S.FooterText>
+        <S.FooterLink onPress={onGoToRegister}>
+          <S.FooterText>Não tem conta? Cadastre-se</S.FooterText>
         </S.FooterLink>
       </S.ContentWrapper>
     </S.Container>
