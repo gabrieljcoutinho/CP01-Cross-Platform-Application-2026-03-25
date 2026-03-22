@@ -66,7 +66,7 @@
 ### Passo a passo para clonar e executar localmente
 <ol>
   <li> Comece garantindo a instalação e execução de componentes essenciais, sendo eles: Git, Node, JDK, Android Studio </li>
-  <li> Acesso o Visual Studio Code  </li>
+  <li> Acesse o Visual Studio Code  </li>
   <li> Clone o repositório com o comando: git clone https://github.com/gabrieljcoutinho/CP01-Cross-Platform-Application-2026-03-25.git
   </li>
   <li> Acesse a pasta do projeto: cd CP1-APP-Ficticio </li>
