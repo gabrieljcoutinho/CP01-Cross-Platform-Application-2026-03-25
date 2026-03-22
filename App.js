@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import LoadingScreen from './components/LoadingScreen';
-import LoginScreen from './pages/LoginScreen';
-import RegisterScreen from './pages/Cadastro';
+import LoginScreen from './pages/LoginScreen'; // Importando a nova tela
 import RoomSelectionScreen from './pages/SelecionandoAsala';
 import { useAppLoader } from './hook/useAppLoader';
 
 export default function App() {
-  const isLoaded = useAppLoader(4000);
+  const isLoaded = useAppLoader(4000); // Reduzi para 4s para ficar mais fluido
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [currentScreen, setCurrentScreen] = useState('login'); // 'login' ou 'register'
 
+  // Enquanto carrega, mostra Splash/Loading
   if (!isLoaded) {
     return (
       <>
@@ -20,24 +19,17 @@ export default function App() {
     );
   }
 
+  //Após carregar, se não estiver logado, mostra Login
   if (!isLoggedIn) {
     return (
       <>
-        {currentScreen === 'login' ? (
-          <LoginScreen
-            onLogin={() => setIsLoggedIn(true)}
-            onGoToRegister={() => setCurrentScreen('register')}
-          />
-        ) : (
-          <RegisterScreen
-            onBackToLogin={() => setCurrentScreen('login')}
-          />
-        )}
+        <LoginScreen onLogin={() => setIsLoggedIn(true)} />
         <StatusBar style="light" />
       </>
     );
   }
 
+  //Se estiver logado, mostra a seleção de sala
   return (
     <>
       <RoomSelectionScreen />
