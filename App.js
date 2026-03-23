@@ -16,7 +16,6 @@ export default function App() {
   const [isRegistering, setIsRegistering] = useState(false);
   const [registeredUser, setRegisteredUser] = useState(null);
 
-  // Estado que isola as vibes por andar: { 1: 'Rock', 2: 'Samba' }
   const [floorStates, setFloorStates] = useState({});
   const [selectedFloor, setSelectedFloor] = useState(null);
 
@@ -30,13 +29,13 @@ export default function App() {
     setSelectedFloor(null);
   };
 
-  // Função crucial: Salva a vibe apenas na chave do andar selecionado
+  // Alterado: Agora apenas salva a vibe no estado, sem fechar a tela
   const handleVibeSelection = (vibeName) => {
     setFloorStates((prev) => ({
       ...prev,
       [selectedFloor]: vibeName,
     }));
-    setSelectedFloor(null); // Retorna à lista de andares após escolher
+    // Removido o setSelectedFloor(null) daqui
   };
 
   if (!isLoaded) {
@@ -73,27 +72,25 @@ export default function App() {
     );
   }
 
-  // Renderização da Tela de Vibes com isolamento de dados
   if (selectedFloor) {
     return (
       <>
         <VibeSelectionScreen
           floor={selectedFloor}
-          onBack={handleBackToFloors}
+          onBack={handleBackToFloors} // Agora o usuário só volta quando clicar no botão de voltar
           onSelectVibe={handleVibeSelection}
-          currentVibe={floorStates[selectedFloor]} // Passa a vibe atual do andar (se houver)
+          currentVibe={floorStates[selectedFloor]}
         />
         <StatusBar style="light" />
       </>
     );
   }
 
-  // Tela de Seleção de Andar com feedback visual das escolhas feitas
   return (
     <>
       <RoomSelectionScreen
         onSelectFloor={(floor) => setSelectedFloor(floor)}
-        floorStates={floorStates} // Passa o objeto completo para mostrar o status nos botões
+        floorStates={floorStates}
       />
       <StatusBar style="light" />
     </>
