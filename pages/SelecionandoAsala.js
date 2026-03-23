@@ -71,7 +71,9 @@ const FloorButton = ({ level, index, onSelectFloor, activeVibe }) => {
             }} />
             <S.CardContent>
               <S.InfoArea>
-                <S.RoomIndex>{activeVibe ? `VIBE: ${activeVibe}` : 'Unidade Paulista'}</S.RoomIndex>
+                <S.RoomIndex style={{ color: activeVibe ? '#ed145b' : '#fff' }}>
+                    {activeVibe ? `VIBE: ${activeVibe.toUpperCase()}` : 'UNIDADE PAULISTA'}
+                </S.RoomIndex>
                 <S.RoomLabel>Andar {level}º</S.RoomLabel>
               </S.InfoArea>
             </S.CardContent>
@@ -87,11 +89,7 @@ export default function RoomSelectionScreen({ onSelectFloor, floorStates = {} })
 
   return (
     <S.Container>
-      <S.MainBackground
-        colors={['#000000', '#08080c', '#ed145b10']}
-        start={{ x: 0.5, y: 0 }}
-        end={{ x: 0.5, y: 1 }}
-      />
+      <S.MainBackground colors={['#000000', '#08080c', '#ed145b10']} />
       <S.HeaderSection>
         <S.GlitchContainer>
           <S.TitleMain>FIAP PAULISTA</S.TitleMain>

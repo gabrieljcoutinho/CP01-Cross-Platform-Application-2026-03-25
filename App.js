@@ -6,86 +6,86 @@ import LoginScreen from './pages/LoginScreen';
 import RegistrationScreen from './pages/RegistrationScreen';
 import RoomSelectionScreen from './pages/SelecionandoAsala';
 import VibeSelectionScreen from './pages/VibeSelectionScreen';
+import MusicListScreen from './pages/MusicListScreen';
 
 import { useAppLoader } from './hook/useAppLoader';
 
 export default function App() {
   const isLoaded = useAppLoader(4000);
-
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
   const [registeredUser, setRegisteredUser] = useState(null);
 
   const [floorStates, setFloorStates] = useState({});
   const [selectedFloor, setSelectedFloor] = useState(null);
+  const [isViewingSongs, setIsViewingSongs] = useState(false);
 
+  // Css da responsividade desse componente
+  // Garante que o usuário volte ao login após o cadastro
   const handleUserRegistration = (user, password) => {
     setRegisteredUser({ user, password });
     setIsRegistering(false);
-    setIsLoggedIn(false);
   };
 
-  const handleBackToFloors = () => {
-    setSelectedFloor(null);
-  };
-
-  // Alterado: Agora apenas salva a vibe no estado, sem fechar a tela
   const handleVibeSelection = (vibeName) => {
     setFloorStates((prev) => ({
       ...prev,
       [selectedFloor]: vibeName,
     }));
-    // Removido o setSelectedFloor(null) daqui
+    setIsViewingSongs(true);
   };
 
-  if (!isLoaded) {
-    return (
-      <>
-        <LoadingScreen />
-        <StatusBar style="light" />
-      </>
-    );
-  }
+  const handleBackToGenres = () => {
+    setIsViewingSongs(false);
+  };
 
+  if (!isLoaded) return <LoadingScreen />;
+
+  // PRIORIDADE 1: Se estiver cadastrando, mostra a tela de cadastro
   if (isRegistering) {
     return (
-      <>
-        <RegistrationScreen
-          onRegister={handleUserRegistration}
-          onBack={() => setIsRegistering(false)}
-        />
-        <StatusBar style="light" />
-      </>
+      <RegistrationScreen
+        onRegister={handleUserRegistration}
+        onBack={() => setIsRegistering(false)}
+      />
     );
   }
 
+  // PRIORIDADE 2: Se não estiver logado, mostra o Login
   if (!isLoggedIn) {
     return (
-      <>
-        <LoginScreen
-          onLogin={() => setIsLoggedIn(true)}
-          onGoToRegister={() => setIsRegistering(true)}
-          registeredUser={registeredUser}
-        />
-        <StatusBar style="light" />
-      </>
+      <LoginScreen
+        onLogin={() => setIsLoggedIn(true)}
+        onGoToRegister={() => setIsRegistering(true)}
+        registeredUser={registeredUser}
+      />
     );
   }
 
+  // TELA 3: Lista de Músicas (Aberto após escolher o gênero)
+  if (selectedFloor && isViewingSongs) {
+    return (
+      <MusicListScreen
+        floor={selectedFloor}
+        genre={floorStates[selectedFloor]}
+        onBack={handleBackToGenres}
+      />
+    );
+  }
+
+  // TELA 2: Seleção de Gênero (Aberto após escolher o andar)
   if (selectedFloor) {
     return (
-      <>
-        <VibeSelectionScreen
-          floor={selectedFloor}
-          onBack={handleBackToFloors} // Agora o usuário só volta quando clicar no botão de voltar
-          onSelectVibe={handleVibeSelection}
-          currentVibe={floorStates[selectedFloor]}
-        />
-        <StatusBar style="light" />
-      </>
+      <VibeSelectionScreen
+        floor={selectedFloor}
+        onBack={() => setSelectedFloor(null)}
+        onSelectVibe={handleVibeSelection}
+        currentVibe={floorStates[selectedFloor]}
+      />
     );
   }
 
+  // TELA 1: Seleção de Andar (Home do App)
   return (
     <>
       <RoomSelectionScreen
