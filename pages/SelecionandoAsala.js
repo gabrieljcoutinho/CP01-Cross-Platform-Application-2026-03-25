@@ -94,8 +94,8 @@ export default function RoomSelectionScreen({ onSelectFloor, floorStates = {} })
       />
       <S.HeaderSection>
         <S.GlitchContainer>
-          <S.TitleMain>SELECT LEVEL</S.TitleMain>
-          <S.TitleSub>SISTEMA DE ACESSO</S.TitleSub>
+          <S.TitleMain>FIAP PAULISTA</S.TitleMain>
+          <S.TitleSub>ESCOLHA SEU ANDAR</S.TitleSub>
         </S.GlitchContainer>
       </S.HeaderSection>
 
