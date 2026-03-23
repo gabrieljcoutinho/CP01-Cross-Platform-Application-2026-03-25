@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Platform, Alert } from 'react-native';
 import * as S from '../Css/styleLogin';
 
-export default function LoginScreen({ onLogin }) {
+export default function LoginScreen({ onLogin, onGoToRegister, registeredUser }) {
   const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
 
@@ -11,8 +11,26 @@ export default function LoginScreen({ onLogin }) {
       Alert.alert("Acesso Negado", "Preencha todos os campos do sistema.");
       return;
     }
-    // Aqui você pode adicionar lógica de autenticação real
-    onLogin();
+
+    if (!registeredUser) {
+      Alert.alert(
+        "Usuário não encontrado",
+        "Nenhum registro detectado. Por favor, crie uma conta primeiro."
+      );
+      return;
+    }
+
+    if (user === registeredUser.user && password === registeredUser.password) {
+      console.log("LOGIN OK");
+      onLogin();
+    } else {
+      Alert.alert("Erro de Autenticação", "Usuário_ID ou Password_Key incorretos.");
+    }
+  };
+
+  const handleGoToRegister = () => {
+    console.log("CLICOU CADASTRAR"); // 🔥 DEBUG
+    onGoToRegister();
   };
 
   return (
@@ -24,6 +42,7 @@ export default function LoginScreen({ onLogin }) {
       />
 
       <S.ContentWrapper behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+
         <S.HeaderSection>
           <S.LoginSubtitle>System Access</S.LoginSubtitle>
           <S.LoginTitle>LOGIN</S.LoginTitle>
@@ -32,7 +51,7 @@ export default function LoginScreen({ onLogin }) {
         <S.InputContainer>
           <S.Label>Usuário_ID</S.Label>
           <S.StyledInput
-            placeholder="Ex: admin_fiap"
+            placeholder="Digite seu usuário"
             value={user}
             onChangeText={setUser}
             autoCapitalize="none"
@@ -53,9 +72,16 @@ export default function LoginScreen({ onLogin }) {
           <S.ButtonText>Acessar Sistema</S.ButtonText>
         </S.LoginButton>
 
-        <S.FooterLink>
-          <S.FooterText>Esqueceu as credenciais de acesso?</S.FooterText>
+        {/* 🔥 BOTÃO DE CADASTRO CORRIGIDO */}
+        <S.FooterLink onPress={handleGoToRegister}>
+          <S.FooterText>
+            Não possui acesso?{" "}
+            <S.FooterText style={{ color: '#ed145b', fontWeight: 'bold' }}>
+              CADASTRE-SE
+            </S.FooterText>
+          </S.FooterText>
         </S.FooterLink>
+
       </S.ContentWrapper>
     </S.Container>
   );
