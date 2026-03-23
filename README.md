@@ -81,6 +81,26 @@
 
 ## Decisões Técnicas
 ### Estrutura do projeto
+<p>
+O projeto está organizado em pastas que separam responsabilidades como interface, lógica e recursos visuais:
+</p>
+
+```
+CP01-Cross-Platform-Application-2026-03-25/
+│
+├── components
+├── Css
+├── hook
+├── Ideas - leyout
+├── imgs
+├── pages
+│
+├── App.js
+├── index.js
+├── app.json
+└── package.json
+```
+
 ### Estrutura da navegação
 Aplicativo
 <br> ↳ Tela de Carregamento 
@@ -125,5 +145,5 @@ export const useAppLoader = (duration = 5000) => {
 ##
 <p align="center">
   <em>Desenvolvido por:</em><br>
-  <em>Pedro Lisboa, Felipe Rodrigues Ribeiro dos Santos, Gabriel Jorge Coutinho, Bruna Marques e Queiroz, Manoela Oliveira Bello</em>
+  <em>Pedro Henrique Lisboa, Felipe Rodrigues Ribeiro dos Santos, Gabriel Jorge Coutinho, Bruna Marques e Queiroz, Manoela Oliveira Bello</em>
 </p>
