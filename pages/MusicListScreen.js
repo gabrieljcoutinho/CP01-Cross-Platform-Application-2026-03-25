@@ -3,7 +3,7 @@ import { FlatList, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Audio } from 'expo-av'; // Importa o áudio
 import * as S from '../Css/styleMusicList';
-import { MUSIC_DATABASE } from './musicData';
+import { MUSIC_DATABASE } from '../data/musicData';
 
 export default function MusicListScreen({ floor, genre, onBack }) {
   const [sound, setSound] = useState();
