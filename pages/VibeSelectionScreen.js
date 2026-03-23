@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Animated } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import * as S from '../Css/styleVibeSelection';
 
-// Importação das imagens conforme solicitado
 const genres = [
   { id: '1', name: 'Rock', img: require('../imgs/Rock.png') },
   { id: '2', name: 'Eletrônico', img: require('../imgs/Eletronico.png') },
@@ -14,11 +14,22 @@ const genres = [
 
 export default function VibeSelectionScreen({ onSelectVibe }) {
   const [search, setSearch] = useState('');
+  const [fadeAnim] = useState(new Animated.Value(0));
 
-  // Filtro básico para o campo de busca
-  const filteredGenres = genres.filter(g => 
+  const filteredGenres = genres.filter(g =>
     g.name.toLowerCase().includes(search.toLowerCase())
   );
+
+  const hasResults = filteredGenres.length > 0;
+
+  useEffect(() => {
+    if (!hasResults) {
+      Animated.sequence([
+        Animated.timing(fadeAnim, { toValue: 0, duration: 0, useNativeDriver: true }),
+        Animated.spring(fadeAnim, { toValue: 1, friction: 4, useNativeDriver: true })
+      ]).start();
+    }
+  }, [hasResults]);
 
   return (
     <S.Container>
@@ -27,38 +38,47 @@ export default function VibeSelectionScreen({ onSelectVibe }) {
         start={{ x: 0.5, y: 0 }}
         end={{ x: 0.5, y: 1 }}
       />
-      
+
       <S.ScrollArea>
         <S.ContentWrapper>
           <S.HeaderSection>
             <S.TitleMain>Choose your{"\n"}<S.TitleAccent>Vibe</S.TitleAccent></S.TitleMain>
             <S.Subtitle>
-              Selecione o som que define a frequência deste andar. 
+              Selecione o som que define a frequência deste andar.
               Sua escolha influencia a playlist ao vivo.
             </S.Subtitle>
           </S.HeaderSection>
 
-          {/* Campo de Busca */}
           <S.SearchContainer>
-            <S.SearchInput 
+            <S.SearchInput
               placeholder="Buscar gênero musical..."
               value={search}
               onChangeText={setSearch}
             />
           </S.SearchContainer>
 
-          {/* Grid de Gêneros */}
           <S.GenreGrid>
-            {filteredGenres.map((item) => (
-              <S.GenreCard key={item.id} activeOpacity={0.7} onPress={() => console.log(item.name)}>
-                <S.GenreImage source={item.img} resizeMode="cover" />
-                <S.CardOverlay 
-                  colors={['transparent', 'rgba(0,0,0,0.8)']}
+            {hasResults ? (
+              filteredGenres.map((item) => (
+                <S.GenreCard
+                  key={item.id}
+                  activeOpacity={0.8}
+                  onPress={() => console.log(item.name)}
                 >
-                  <S.GenreTitle>{item.name}</S.GenreTitle>
-                </S.CardOverlay>
-              </S.GenreCard>
-            ))}
+                  <S.GenreImage source={item.img} resizeMode="cover" />
+                  <S.CardOverlay colors={['transparent', 'rgba(0,0,0,0.9)']}>
+                    <S.GenreTitle>{item.name}</S.GenreTitle>
+                  </S.CardOverlay>
+                </S.GenreCard>
+              ))
+            ) : (
+              <S.EmptyWrapper style={{ opacity: fadeAnim, transform: [{ scale: fadeAnim }] }}>
+                <S.EmptyGlitchLine />
+                <S.EmptyText>Esse estilo musical não tem.</S.EmptyText>
+                <S.EmptyTextSub>Tente uma nova frequência de busca</S.EmptyTextSub>
+                <S.EmptyGlitchLine />
+              </S.EmptyWrapper>
+            )}
           </S.GenreGrid>
         </S.ContentWrapper>
       </S.ScrollArea>
