@@ -12,7 +12,7 @@ const genres = [
   { id: '6', name: 'Samba', img: require('../imgs/Samba.png') },
 ];
 
-export default function VibeSelectionScreen({ onSelectVibe }) {
+export default function VibeSelectionScreen({ onSelectVibe, floor, currentVibe }) {
   const [search, setSearch] = useState('');
   const [fadeAnim] = useState(new Animated.Value(0));
 
@@ -38,45 +38,47 @@ export default function VibeSelectionScreen({ onSelectVibe }) {
         start={{ x: 0.5, y: 0 }}
         end={{ x: 0.5, y: 1 }}
       />
-
       <S.ScrollArea>
         <S.ContentWrapper>
           <S.HeaderSection>
-            <S.TitleMain>Choose your{"\n"}<S.TitleAccent>Vibe</S.TitleAccent></S.TitleMain>
-            <S.Subtitle>
-              Selecione o som que define a frequência deste andar.
-              Sua escolha influencia a playlist ao vivo.
-            </S.Subtitle>
+            <S.TitleMain>Andar <S.TitleAccent>{floor}º</S.TitleAccent></S.TitleMain>
+            <S.Subtitle>Selecione a playlist independente para este andar.</S.Subtitle>
           </S.HeaderSection>
 
           <S.SearchContainer>
             <S.SearchInput
-              placeholder="Buscar gênero musical..."
+              placeholder="Buscar gênero..."
               value={search}
               onChangeText={setSearch}
+              placeholderTextColor="rgba(255,255,255,0.2)"
             />
           </S.SearchContainer>
 
           <S.GenreGrid>
+            {/* Css da responsividade desse componente: Grid adaptável */}
             {hasResults ? (
-              filteredGenres.map((item) => (
-                <S.GenreCard
-                  key={item.id}
-                  activeOpacity={0.8}
-                  onPress={() => console.log(item.name)}
-                >
-                  <S.GenreImage source={item.img} resizeMode="cover" />
-                  <S.CardOverlay colors={['transparent', 'rgba(0,0,0,0.9)']}>
-                    <S.GenreTitle>{item.name}</S.GenreTitle>
-                  </S.CardOverlay>
-                </S.GenreCard>
-              ))
+              filteredGenres.map((item) => {
+                const isSelected = currentVibe === item.name;
+                return (
+                  <S.GenreCard
+                    key={item.id}
+                    onPress={() => onSelectVibe(item.name)}
+                    style={{
+                      borderColor: isSelected ? '#ed145b' : 'rgba(255,255,255,0.05)',
+                      borderWidth: isSelected ? 2 : 1,
+                      transform: [{ scale: isSelected ? 1.05 : 1 }]
+                    }}
+                  >
+                    <S.GenreImage source={item.img} />
+                    <S.CardOverlay colors={['transparent', isSelected ? 'rgba(237,20,91,0.8)' : 'rgba(0,0,0,0.9)']}>
+                      <S.GenreTitle>{item.name}</S.GenreTitle>
+                    </S.CardOverlay>
+                  </S.GenreCard>
+                );
+              })
             ) : (
-              <S.EmptyWrapper style={{ opacity: fadeAnim, transform: [{ scale: fadeAnim }] }}>
-                <S.EmptyGlitchLine />
-                <S.EmptyText>Esse estilo musical não tem.</S.EmptyText>
-                <S.EmptyTextSub>Tente uma nova frequência de busca</S.EmptyTextSub>
-                <S.EmptyGlitchLine />
+              <S.EmptyWrapper style={{ opacity: fadeAnim }}>
+                <S.EmptyText>Nenhum resultado encontrado.</S.EmptyText>
               </S.EmptyWrapper>
             )}
           </S.GenreGrid>

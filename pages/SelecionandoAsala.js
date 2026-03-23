@@ -4,7 +4,7 @@ import * as S from '../Css/styleEscolhaDeSala';
 
 const { width } = Dimensions.get('window');
 
-const FloorButton = ({ level, index, onSelectFloor }) => {
+const FloorButton = ({ level, index, onSelectFloor, activeVibe }) => {
   const animatedValue = useRef(new Animated.Value(0)).current;
   const hoverValue = useRef(new Animated.Value(0)).current;
   const pressScale = useRef(new Animated.Value(1)).current;
@@ -54,12 +54,13 @@ const FloorButton = ({ level, index, onSelectFloor }) => {
       >
         <S.ButtonContainer>
           <S.GlowLayer style={{
-            opacity: hoverValue.interpolate({
+            opacity: activeVibe ? 0.7 : hoverValue.interpolate({
               inputRange: [0, 1],
               outputRange: [0, 0.4]
-            })
+            }),
+            backgroundColor: activeVibe ? '#ed145b' : '#00f2ff'
           }} />
-          <S.GlassCard>
+          <S.GlassCard style={{ borderColor: activeVibe ? '#ed145b' : 'rgba(255,255,255,0.1)' }}>
             <S.ScanLine style={{
               transform: [{
                 translateX: hoverValue.interpolate({
@@ -70,7 +71,7 @@ const FloorButton = ({ level, index, onSelectFloor }) => {
             }} />
             <S.CardContent>
               <S.InfoArea>
-                <S.RoomIndex>Unidade Paulista</S.RoomIndex>
+                <S.RoomIndex>{activeVibe ? `VIBE: ${activeVibe}` : 'Unidade Paulista'}</S.RoomIndex>
                 <S.RoomLabel>Andar {level}º</S.RoomLabel>
               </S.InfoArea>
             </S.CardContent>
@@ -81,7 +82,7 @@ const FloorButton = ({ level, index, onSelectFloor }) => {
   );
 };
 
-export default function RoomSelectionScreen({ onSelectFloor }) {
+export default function RoomSelectionScreen({ onSelectFloor, floorStates = {} }) {
   const data = [1, 2, 3, 4, 5, 6, 7];
 
   return (
@@ -91,23 +92,14 @@ export default function RoomSelectionScreen({ onSelectFloor }) {
         start={{ x: 0.5, y: 0 }}
         end={{ x: 0.5, y: 1 }}
       />
-
       <S.HeaderSection>
         <S.GlitchContainer>
           <S.TitleMain>SELECT LEVEL</S.TitleMain>
-          <S.TitleSub>PAULISTA</S.TitleSub>
+          <S.TitleSub>SISTEMA DE ACESSO</S.TitleSub>
         </S.GlitchContainer>
-        <S.StatusRow>
-          <S.StatusPulse />
-          <S.SystemText>SISTEMA DE ACESSO POR ANDAR</S.SystemText>
-        </S.StatusRow>
       </S.HeaderSection>
 
-      <S.ScrollArea
-        showsVerticalScrollIndicator={true}
-        persistentScrollbar={true}
-        indicatorStyle="white"
-      >
+      <S.ScrollArea persistentScrollbar={true}>
         <S.MenuGrid>
           {data.map((level, index) => (
             <FloorButton
@@ -115,6 +107,7 @@ export default function RoomSelectionScreen({ onSelectFloor }) {
               level={level}
               index={index}
               onSelectFloor={onSelectFloor}
+              activeVibe={floorStates[level]}
             />
           ))}
         </S.MenuGrid>
