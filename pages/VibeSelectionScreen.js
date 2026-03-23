@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { Animated, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { Animated, TouchableWithoutFeedback, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { Ionicons } from '@expo/vector-icons'; // Certifique-se de ter o expo-icons instalado
+import { Ionicons } from '@expo/vector-icons';
 import * as S from '../Css/styleVibeSelection';
 
 const genres = [
@@ -13,15 +13,35 @@ const genres = [
   { id: '6', name: 'Samba', img: require('../imgs/Samba.png') },
 ];
 
+const AnimatedCard = Animated.createAnimatedComponent(S.GenreCard);
+
 export default function VibeSelectionScreen({ onSelectVibe, floor, currentVibe, onBack }) {
   const [search, setSearch] = useState('');
-  const [fadeAnim] = useState(new Animated.Value(0));
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  // Objeto para armazenar as referências das animações de cada card
+  const scaleAnims = useRef(genres.reduce((acc, genre) => {
+    acc[genre.name] = new Animated.Value(currentVibe === genre.name ? 1 : 0);
+    return acc;
+  }, {})).current;
 
   const filteredGenres = genres.filter(g =>
     g.name.toLowerCase().includes(search.toLowerCase())
   );
 
   const hasResults = filteredGenres.length > 0;
+
+  useEffect(() => {
+    genres.forEach(genre => {
+      const isSelected = currentVibe === genre.name;
+      Animated.spring(scaleAnims[genre.name], {
+        toValue: isSelected ? 1 : 0,
+        friction: 5,
+        tension: 40,
+        useNativeDriver: true,
+      }).start();
+    });
+  }, [currentVibe]);
 
   useEffect(() => {
     if (!hasResults) {
@@ -40,14 +60,15 @@ export default function VibeSelectionScreen({ onSelectVibe, floor, currentVibe, 
         end={{ x: 0.5, y: 1 }}
       />
 
-      {/* Botão de Voltar Radical no Topo */}
       <S.BackButtonContainer>
-        <TouchableOpacity onPress={onBack} activeOpacity={0.7}>
-          <S.BackButtonCircle>
-            <Ionicons name="chevron-back" size={28} color="#ed145b" />
-          </S.BackButtonCircle>
-        </TouchableOpacity>
-        <S.BackText>Escolher outra sala</S.BackText>
+        <TouchableWithoutFeedback onPress={onBack}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <S.BackButtonCircle>
+              <Ionicons name="chevron-back" size={28} color="#ed145b" />
+            </S.BackButtonCircle>
+            <S.BackText>Escolher outra sala</S.BackText>
+          </View>
+        </TouchableWithoutFeedback>
       </S.BackButtonContainer>
 
       <S.ScrollArea>
@@ -62,7 +83,6 @@ export default function VibeSelectionScreen({ onSelectVibe, floor, currentVibe, 
               placeholder="Buscar gênero..."
               value={search}
               onChangeText={setSearch}
-              placeholderTextColor="rgba(255,255,255,0.2)"
             />
           </S.SearchContainer>
 
@@ -70,22 +90,35 @@ export default function VibeSelectionScreen({ onSelectVibe, floor, currentVibe, 
             {hasResults ? (
               filteredGenres.map((item) => {
                 const isSelected = currentVibe === item.name;
+
+                const cardScale = scaleAnims[item.name].interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [1, 1.05]
+                });
+
+                const glowOpacity = scaleAnims[item.name].interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [0, 1]
+                });
+
                 return (
-                  <S.GenreCard
+                  <AnimatedCard
                     key={item.id}
                     onPress={() => onSelectVibe(item.name)}
                     style={{
+                      transform: [{ scale: cardScale }],
                       borderColor: isSelected ? '#ed145b' : 'rgba(255,255,255,0.05)',
-                      borderWidth: isSelected ? 2 : 1,
-                      transform: [{ scale: isSelected ? 1.05 : 1 }]
+                      shadowOpacity: glowOpacity
                     }}
                   >
                     <S.GenreImage source={item.img} />
-                    <S.CardOverlay colors={['transparent', isSelected ? 'rgba(237,20,91,0.8)' : 'rgba(0,0,0,0.9)']}>
+                    <S.CardOverlay
+                      colors={['transparent', isSelected ? 'rgba(237,20,91,0.9)' : 'rgba(0,0,0,0.9)']}
+                    >
                       <S.GenreTitle>{item.name}</S.GenreTitle>
                       {isSelected && <S.ActiveMarker />}
                     </S.CardOverlay>
-                  </S.GenreCard>
+                  </AnimatedCard>
                 );
               })
             ) : (

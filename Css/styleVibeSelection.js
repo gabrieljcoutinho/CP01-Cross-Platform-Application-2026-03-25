@@ -2,7 +2,7 @@ import styled from 'styled-components/native';
 import { Dimensions, Animated } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 const cardWidth = (width - 65) / 2;
 
 export const Container = styled.View`
@@ -37,6 +37,7 @@ export const BackButtonCircle = styled.View`
   justify-content: center;
   align-items: center;
   shadow-color: #ed145b;
+  shadow-offset: 0px 4px;
   shadow-opacity: 0.5;
   shadow-radius: 10px;
   elevation: 10;
@@ -101,6 +102,7 @@ export const SearchContainer = styled.View`
   padding-horizontal: 20px;
   margin-bottom: 40px;
   shadow-color: #ed145b;
+  shadow-offset: 0px 10px;
   shadow-opacity: 0.3;
   shadow-radius: 20px;
   elevation: 15;
@@ -123,21 +125,27 @@ export const GenreGrid = styled.View`
   width: 100%;
 `;
 
+/* Componente de Card com suporte a Shadow dinâmico */
 export const GenreCard = styled.TouchableOpacity`
   width: ${cardWidth}px;
   height: 240px;
   margin-bottom: 20px;
   background-color: #0a0a0f;
-  border-radius: 4px;
-  border-width: 1px;
+  border-radius: 8px;
+  border-width: 1.5px;
   overflow: hidden;
   position: relative;
+  shadow-color: #ed145b;
+  shadow-offset: 0px 0px;
+  shadow-radius: 15px;
+  elevation: 5;
 `;
 
 export const GenreImage = styled.Image`
   width: 100%;
   height: 100%;
   position: absolute;
+  opacity: 0.7;
 `;
 
 export const CardOverlay = styled(LinearGradient)`
@@ -158,20 +166,21 @@ export const GenreTitle = styled.Text`
   border-bottom-width: 4px;
   border-bottom-color: #ed145b;
   align-self: flex-start;
+  text-shadow: 0px 2px 4px rgba(0,0,0,0.5);
 `;
 
-/* Indicador de Seleção Ativa */
 export const ActiveMarker = styled.View`
-  width: 12px;
-  height: 12px;
-  background-color: #ed145b;
+  width: 14px;
+  height: 14px;
+  background-color: #fff;
   position: absolute;
   top: 15px;
   right: 15px;
-  border-radius: 2px;
+  border-radius: 7px;
+  border: 3px solid #ed145b;
   shadow-color: #ed145b;
   shadow-opacity: 1;
-  shadow-radius: 10px;
+  shadow-radius: 8px;
   elevation: 10;
 `;
 
@@ -180,34 +189,16 @@ export const EmptyWrapper = styled(Animated.View)`
   padding: 50px 20px;
   align-items: center;
   justify-content: center;
-  border-top-width: 1px;
-  border-top-color: rgba(237, 20, 91, 0.2);
-  background-color: rgba(237, 20, 91, 0.02);
+  border-radius: 12px;
+  border: 1px dashed rgba(237, 20, 91, 0.4);
+  background-color: rgba(237, 20, 91, 0.05);
 `;
 
 export const EmptyText = styled.Text`
   color: #ed145b;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 900;
   text-transform: uppercase;
   text-align: center;
-  letter-spacing: 1px;
-  text-shadow: 0px 0px 15px rgba(237, 20, 91, 0.5);
-`;
-
-export const EmptyTextSub = styled.Text`
-  color: rgba(255, 255, 255, 0.3);
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  margin-top: 8px;
   letter-spacing: 2px;
-`;
-
-export const EmptyGlitchLine = styled.View`
-  width: 60px;
-  height: 2px;
-  background-color: #ed145b;
-  margin: 20px 0;
-  opacity: 0.6;
 `;
