@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Animated } from 'react-native';
+import { Animated, TouchableOpacity } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import { Ionicons } from '@expo/vector-icons'; // Certifique-se de ter o expo-icons instalado
 import * as S from '../Css/styleVibeSelection';
 
 const genres = [
@@ -12,7 +13,7 @@ const genres = [
   { id: '6', name: 'Samba', img: require('../imgs/Samba.png') },
 ];
 
-export default function VibeSelectionScreen({ onSelectVibe, floor, currentVibe }) {
+export default function VibeSelectionScreen({ onSelectVibe, floor, currentVibe, onBack }) {
   const [search, setSearch] = useState('');
   const [fadeAnim] = useState(new Animated.Value(0));
 
@@ -38,6 +39,17 @@ export default function VibeSelectionScreen({ onSelectVibe, floor, currentVibe }
         start={{ x: 0.5, y: 0 }}
         end={{ x: 0.5, y: 1 }}
       />
+
+      {/* Botão de Voltar Radical no Topo */}
+      <S.BackButtonContainer>
+        <TouchableOpacity onPress={onBack} activeOpacity={0.7}>
+          <S.BackButtonCircle>
+            <Ionicons name="chevron-back" size={28} color="#ed145b" />
+          </S.BackButtonCircle>
+        </TouchableOpacity>
+        <S.BackText>Escolher outra sala</S.BackText>
+      </S.BackButtonContainer>
+
       <S.ScrollArea>
         <S.ContentWrapper>
           <S.HeaderSection>
@@ -55,7 +67,6 @@ export default function VibeSelectionScreen({ onSelectVibe, floor, currentVibe }
           </S.SearchContainer>
 
           <S.GenreGrid>
-            {/* Css da responsividade desse componente: Grid adaptável */}
             {hasResults ? (
               filteredGenres.map((item) => {
                 const isSelected = currentVibe === item.name;
@@ -72,6 +83,7 @@ export default function VibeSelectionScreen({ onSelectVibe, floor, currentVibe }
                     <S.GenreImage source={item.img} />
                     <S.CardOverlay colors={['transparent', isSelected ? 'rgba(237,20,91,0.8)' : 'rgba(0,0,0,0.9)']}>
                       <S.GenreTitle>{item.name}</S.GenreTitle>
+                      {isSelected && <S.ActiveMarker />}
                     </S.CardOverlay>
                   </S.GenreCard>
                 );
