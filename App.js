@@ -1,15 +1,25 @@
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import LoadingScreen from './components/LoadingScreen';
-import LoginScreen from './pages/LoginScreen'; // Importando a nova tela
+import LoginScreen from './pages/LoginScreen';
+import RegistrationScreen from './pages/RegistrationScreen'; // Nova Importação
 import RoomSelectionScreen from './pages/SelecionandoAsala';
 import { useAppLoader } from './hook/useAppLoader';
 
 export default function App() {
-  const isLoaded = useAppLoader(4000); // Reduzi para 4s para ficar mais fluido
+  const isLoaded = useAppLoader(4000); 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isRegistering, setIsRegistering] = useState(false);
+  
+  // Estado para salvar o usuário cadastrado (Simulando um banco de dados)
+  const [registeredUser, setRegisteredUser] = useState(null);
 
-  // Enquanto carrega, mostra Splash/Loading
+  // Função para salvar cadastro
+  const handleUserRegistration = (user, password) => {
+    setRegisteredUser({ user, password });
+    setIsRegistering(false); // Volta para o login após cadastrar
+  };
+
   if (!isLoaded) {
     return (
       <>
@@ -19,17 +29,34 @@ export default function App() {
     );
   }
 
-  //Após carregar, se não estiver logado, mostra Login
-  if (!isLoggedIn) {
+  // Se o usuário está na tela de Cadastro
+  if (isRegistering) {
     return (
       <>
-        <LoginScreen onLogin={() => setIsLoggedIn(true)} />
+        <RegistrationScreen 
+          onRegister={handleUserRegistration} 
+          onBack={() => setIsRegistering(false)} 
+        />
         <StatusBar style="light" />
       </>
     );
   }
 
-  //Se estiver logado, mostra a seleção de sala
+  // Se não está logado, mostra Login
+  if (!isLoggedIn) {
+    return (
+      <>
+        <LoginScreen 
+          onLogin={() => setIsLoggedIn(true)} 
+          onGoToRegister={() => setIsRegistering(true)}
+          registeredUser={registeredUser}
+        />
+        <StatusBar style="light" />
+      </>
+    );
+  }
+
+  // Se logado, mostra seleção de sala
   return (
     <>
       <RoomSelectionScreen />
@@ -37,7 +64,6 @@ export default function App() {
     </>
   );
 }
-
 
 
 
