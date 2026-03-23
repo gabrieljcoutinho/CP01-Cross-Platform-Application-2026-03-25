@@ -158,7 +158,7 @@ export const MUSIC_DATABASE = {
     // --- ANDAR 7 ---
     "7-Rock": [
       { id: 701, title: "Final Stage Rock", artist: "Boss Battle", url: "..." },
-      { id: 702, title: "The Last Solo", artist: "End Game", url: "..." }
+      { id: '702', title: "The Last Solo", artist: "End Game", url: "..." }
     ],
     "7-Eletrônico": [
       { id: 703, title: "Ultraviolet", artist: "Beyond", url: "..." },
@@ -180,4 +180,4 @@ export const MUSIC_DATABASE = {
       { id: 711, title: "O Grande Final", artist: "Show de Bola", url: "..." },
       { id: 712, title: "Carnaval no 7º", artist: "Campeã do Código", url: "..." }
     ]
-  };
+};
