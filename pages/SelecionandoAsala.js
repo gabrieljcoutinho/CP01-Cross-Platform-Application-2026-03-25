@@ -4,7 +4,7 @@ import * as S from '../Css/styleEscolhaDeSala';
 
 const { width } = Dimensions.get('window');
 
-const FloorButton = ({ level, index }) => {
+const FloorButton = ({ level, index, onSelectFloor }) => {
   const animatedValue = useRef(new Animated.Value(0)).current;
   const hoverValue = useRef(new Animated.Value(0)).current;
   const pressScale = useRef(new Animated.Value(1)).current;
@@ -47,7 +47,11 @@ const FloorButton = ({ level, index }) => {
         ]
       }}
     >
-      <TouchableWithoutFeedback onPressIn={onPressIn} onPressOut={onPressOut}>
+      <TouchableWithoutFeedback
+        onPressIn={onPressIn}
+        onPressOut={onPressOut}
+        onPress={() => onSelectFloor(level)}
+      >
         <S.ButtonContainer>
           <S.GlowLayer style={{
             opacity: hoverValue.interpolate({
@@ -69,7 +73,6 @@ const FloorButton = ({ level, index }) => {
                 <S.RoomIndex>Unidade Paulista</S.RoomIndex>
                 <S.RoomLabel>Andar {level}º</S.RoomLabel>
               </S.InfoArea>
-              {/* O bloco LevelDisplay (número grande e linha) foi removido daqui */}
             </S.CardContent>
           </S.GlassCard>
         </S.ButtonContainer>
@@ -78,7 +81,7 @@ const FloorButton = ({ level, index }) => {
   );
 };
 
-export default function RoomSelectionScreen() {
+export default function RoomSelectionScreen({ onSelectFloor }) {
   const data = [1, 2, 3, 4, 5, 6, 7];
 
   return (
@@ -111,6 +114,7 @@ export default function RoomSelectionScreen() {
               key={level}
               level={level}
               index={index}
+              onSelectFloor={onSelectFloor}
             />
           ))}
         </S.MenuGrid>

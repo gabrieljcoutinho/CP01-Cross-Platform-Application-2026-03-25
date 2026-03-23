@@ -15,13 +15,10 @@ export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
   const [registeredUser, setRegisteredUser] = useState(null);
-
   const [selectedFloor, setSelectedFloor] = useState(null);
 
   const handleUserRegistration = (user, password) => {
     setRegisteredUser({ user, password });
-
-    // 🔥 força fluxo correto
     setIsRegistering(false);
     setIsLoggedIn(false);
   };
@@ -29,9 +26,6 @@ export default function App() {
   const handleBackToFloors = () => {
     setSelectedFloor(null);
   };
-
-  console.log("isRegistering:", isRegistering);
-  console.log("isLoggedIn:", isLoggedIn);
 
   if (!isLoaded) {
     return (
@@ -42,32 +36,24 @@ export default function App() {
     );
   }
 
-  // 🔥 PRIORIDADE TOTAL pro cadastro
-  if (isRegistering === true) {
+  if (isRegistering) {
     return (
       <>
         <RegistrationScreen
           onRegister={handleUserRegistration}
-          onBack={() => {
-            console.log("voltando pro login");
-            setIsRegistering(false);
-          }}
+          onBack={() => setIsRegistering(false)}
         />
         <StatusBar style="light" />
       </>
     );
   }
 
-  // 🔥 só mostra login se NÃO estiver cadastrando
-  if (isLoggedIn === false && isRegistering === false) {
+  if (!isLoggedIn) {
     return (
       <>
         <LoginScreen
           onLogin={() => setIsLoggedIn(true)}
-          onGoToRegister={() => {
-            console.log("indo pra cadastro");
-            setIsRegistering(true);
-          }}
+          onGoToRegister={() => setIsRegistering(true)}
           registeredUser={registeredUser}
         />
         <StatusBar style="light" />
@@ -75,6 +61,7 @@ export default function App() {
     );
   }
 
+  // Se um andar foi selecionado, mostra a Vibe
   if (selectedFloor) {
     return (
       <>
@@ -87,6 +74,7 @@ export default function App() {
     );
   }
 
+  // Tela principal após login: Seleção de Andar
   return (
     <>
       <RoomSelectionScreen onSelectFloor={(floor) => setSelectedFloor(floor)} />
