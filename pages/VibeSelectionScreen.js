@@ -9,7 +9,7 @@ const genres = [
   { id: '3', name: 'Sertanejo', img: require('../imgs/Sertanejo.png') },
   { id: '4', name: 'Funk', img: require('../imgs/Funk.png') },
   { id: '5', name: 'Rap', img: require('../imgs/Rap.png') },
-  { id: '6', name: 'Samba', img: require('../imgs/Samba.png') },
+  { id: '6', name: 'Pagode', img: require('../imgs/Samba.png') },
 ];
 
 const AnimatedCard = Animated.createAnimatedComponent(S.GenreCard);
