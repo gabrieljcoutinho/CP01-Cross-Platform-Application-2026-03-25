@@ -66,16 +66,6 @@
   <br><em> Nota: Tanto o node quanto o JDK devem ser utilizados na versão LTS </em>
 </ul>
 
-## Comandos:
-> git clone: https://github.com/gabrieljcoutinho/CP01-Cross-Platform-Application-2026-03-25.git
-
-> nodule_models: npm install --legacy-peer-deps
-
-> Rode o android studio, espera a tela aparecer
-
-> No terminal npm: start
-
-> Depois de estar rodando apertar A no terminal
 
 ### Passo a passo para clonar e executar localmente
 <ol>
