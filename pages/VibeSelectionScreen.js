@@ -30,29 +30,49 @@ export default function VibeSelectionScreen({ onSelectVibe, floor, currentVibe, 
   return (
     <S.Container>
       <S.MainBackground colors={['#000', '#0a0a0f', '#ed145b15']} />
+
       <S.BackButtonContainer>
         <TouchableWithoutFeedback onPress={onBack}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <S.BackButtonCircle><Ionicons name="chevron-back" size={28} color="#ed145b" /></S.BackButtonCircle>
+            <S.BackButtonCircle>
+              <Ionicons name="chevron-back" size={28} color="#ed145b" />
+            </S.BackButtonCircle>
             <S.BackText>Sair do Andar {floor}</S.BackText>
           </View>
         </TouchableWithoutFeedback>
       </S.BackButtonContainer>
+
       <S.ScrollArea>
-        <S.HeaderSection>
-          <S.TitleMain>Andar <S.TitleAccent>{floor}º</S.TitleAccent></S.TitleMain>
-          <S.Subtitle>Selecione um gênero para ver as músicas.</S.Subtitle>
-        </S.HeaderSection>
-        <S.GenreGrid>
-          {genres.map((item) => (
-            <AnimatedCard key={item.id} onPress={() => onSelectVibe(item.name)} style={{ transform: [{ scale: scaleAnims[item.name].interpolate({ inputRange: [0, 1], outputRange: [1, 1.05] }) }], borderColor: currentVibe === item.name ? '#ed145b' : 'transparent' }}>
-              <S.GenreImage source={item.img} />
-              <S.CardOverlay colors={['transparent', 'rgba(0,0,0,0.8)']}>
-                <S.GenreTitle>{item.name.toUpperCase()}</S.GenreTitle>
-              </S.CardOverlay>
-            </AnimatedCard>
-          ))}
-        </S.GenreGrid>
+        <S.ContentWrapper>
+          <S.HeaderSection>
+            <S.TitleMain>Andar <S.TitleAccent>{floor}º</S.TitleAccent></S.TitleMain>
+            <S.Subtitle>Selecione um gênero para ver as músicas.</S.Subtitle>
+          </S.HeaderSection>
+
+          <S.GenreGrid>
+            {genres.map((item) => (
+              <AnimatedCard
+                key={item.id}
+                onPress={() => onSelectVibe(item.name)}
+                style={{
+                  transform: [{
+                    scale: scaleAnims[item.name].interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [1, 1.05]
+                    })
+                  }],
+                  borderColor: currentVibe === item.name ? '#ed145b' : 'rgba(255,255,255,0.05)'
+                }}
+              >
+                <S.GenreImage source={item.img} />
+                <S.CardOverlay colors={['transparent', 'rgba(0,0,0,0.9)']}>
+                  <S.GenreTitle>{item.name.toUpperCase()}</S.GenreTitle>
+                </S.CardOverlay>
+                {currentVibe === item.name && <S.ActiveMarker />}
+              </AnimatedCard>
+            ))}
+          </S.GenreGrid>
+        </S.ContentWrapper>
       </S.ScrollArea>
     </S.Container>
   );
