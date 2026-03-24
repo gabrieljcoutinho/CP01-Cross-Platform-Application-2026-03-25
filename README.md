@@ -75,7 +75,7 @@
 
 > No terminal npm: start
 
-> Depois de estar rodando apertar A 
+> Depois de estar rodando apertar A no terminal
 
 ### Passo a passo para clonar e executar localmente
 <ol>
