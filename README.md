@@ -23,7 +23,7 @@
   <a href="https://skillicons.dev">
     <img src="https://skillicons.dev/icons?i=git,python,react,javascript,css,html" />
   </a>
-</p> 
+</p>
 
 ### Funcionalidades
 <ul>
@@ -59,12 +59,21 @@
   <li> Node.js ➜ permite executar o JavaScript fora do navegador </li>
   <li> Gerenciador de pacotes ➜ npm ou Yarn (incluso no Node) </li>
   <li> Java Development Kit (JDK) ➜ compila e executa aplicativos Android</li>
-  <li> Android Studio ➜ emulador de dispositivo Android e gerenciador de AVD (Android Virtual Device). 
+  <li> Android Studio ➜ emulador de dispositivo Android e gerenciador de AVD (Android Virtual Device).
     <br> Configure-o com SDK Platform (Android +13) e SDK Build-Tools.
   </li>
 
   <br><em> Nota: Tanto o node quanto o JDK devem ser utilizados na versão LTS </em>
 </ul>
+
+## Comandos:
+> git clone: https://github.com/gabrieljcoutinho/CP01-Cross-Platform-Application-2026-03-25.git
+
+> nodule_models: npm install --legacy-peer-deps
+
+> Rode o android studio, espera a tela aparecer
+
+> No terminal npm: start
 
 ### Passo a passo para clonar e executar localmente
 <ol>
@@ -106,12 +115,12 @@ CP01-Cross-Platform-Application-2026-03-25/
 
 ### Estrutura da navegação
 Aplicativo
-<br> ↳ Tela de Carregamento 
+<br> ↳ Tela de Carregamento
 <br> ↳ Tela de Inserção de Credenciais (login)
 <br> ↳ Seleção de Andar
 <br> ↳ Seleção de Gênero Musical
 <br> ↳ Seleção de Música
-      
+
 ### Hooks utilizados
 <p>
   <strong>{useEffect}</strong> Este hook automatiza o estado de carregamento da aplicação através de um temporizador inteligente.
