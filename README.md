@@ -75,6 +75,8 @@
 
 > No terminal npm: start
 
+> Depois de estar rodando apertar A 
+
 ### Passo a passo para clonar e executar localmente
 <ol>
   <li> Comece garantindo a instalação e execução de componentes essenciais, sendo eles: Git, Node, JDK, Android Studio </li>
