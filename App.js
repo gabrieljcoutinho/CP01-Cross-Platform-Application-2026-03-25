@@ -6,6 +6,7 @@ import LoginScreen from './pages/LoginScreen';
 import RegistrationScreen from './pages/RegistrationScreen';
 import RoomSelectionScreen from './pages/SelecionandoAsala';
 import VibeSelectionScreen from './pages/VibeSelectionScreen';
+import MusicListScreen from './pages/MusicListScreen';
 
 import { useAppLoader } from './hook/useAppLoader';
 
@@ -18,17 +19,17 @@ export default function App() {
   const [floorStates, setFloorStates] = useState({});
   const [selectedFloor, setSelectedFloor] = useState(null);
 
-  // Css da responsividade desse componente
+  // 🔥 NOVO STATE
+  const [selectedGenre, setSelectedGenre] = useState(null);
+
   const handleUserRegistration = (user, password) => {
     setRegisteredUser({ user, password });
     setIsRegistering(false);
   };
 
+  // 🔥 ALTERADO → agora abre lista de músicas
   const handleVibeSelection = (vibeName) => {
-    setFloorStates((prev) => ({
-      ...prev,
-      [selectedFloor]: vibeName,
-    }));
+    setSelectedGenre(vibeName);
   };
 
   if (!isLoaded) return <LoadingScreen />;
@@ -48,6 +49,16 @@ export default function App() {
         onLogin={() => setIsLoggedIn(true)}
         onGoToRegister={() => setIsRegistering(true)}
         registeredUser={registeredUser}
+      />
+    );
+  }
+
+  // 🔥 NOVA TELA (ANTES DE TUDO)
+  if (selectedGenre) {
+    return (
+      <MusicListScreen
+        genre={selectedGenre}
+        onBack={() => setSelectedGenre(null)}
       />
     );
   }
