@@ -71,7 +71,7 @@ const FloorButton = ({ level, index, onSelectFloor, activeVibe }) => {
             }} />
             <S.CardContent>
               <S.InfoArea>
-                <S.RoomIndex>{activeVibe ? `VIBE: ${activeVibe}` : 'Unidade Paulista'}</S.RoomIndex>
+                <S.RoomIndex>Unidade paulista</S.RoomIndex>
                 <S.RoomLabel>Andar {level}º</S.RoomLabel>
               </S.InfoArea>
             </S.CardContent>
