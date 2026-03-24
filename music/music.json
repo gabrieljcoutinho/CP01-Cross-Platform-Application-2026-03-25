@@ -1,0 +1,98 @@
+{
+    "eletronico": [
+        {
+            "song_id": 1,
+            "title": "Ecstasy",
+            "artist": "Artist A",
+            "path": "music/Eletronico/ecstasy.mp3",
+            "genre": "eletronico"
+        },
+        {
+            "song_id": 2,
+            "title": "On Eon",
+            "artist": "Artist B",
+            "path": "music/Eletronico/oneon.mp3",
+            "genre": "eletronico"
+        }
+    ],
+    "funk": [
+        {
+            "song_id": 3,
+            "title": "Dopamina",
+            "artist": "Artist C",
+            "path": "music/Funk/dopamina.mp3",
+            "genre": "funk"
+        },
+        {
+            "song_id": 4,
+            "title": "Vida Tá de Mais",
+            "artist": "Artist C",
+            "path": "music/Funk/vidatademais.mp3",
+            "genre": "funk"
+        }
+    ],
+    "pagode": [
+        {
+            "song_id": 5,
+            "title": "Pé Na Areia",
+            "artist": "Artist D",
+            "path": "music/Pagode/penaareia.mp3",
+            "genre": "pagode"
+        },
+        {
+            "song_id": 6,
+            "title": "Tá Vendo Aquela Lua",
+            "artist": "Artist H",
+            "path": "music/Pagode/tavendoaquelalua.mp3",
+            "genre": "pagode"
+        }
+    ],
+    "rap": [
+        {
+            "song_id": 7,
+            "title": "Diário de um Detento",
+            "artist": "Artist E",
+            "path": "music/Rap/diariodeumdetento.mp3",
+            "genre": "rap"
+        },
+        {
+            "song_id": 8,
+            "title": "Nada Como um Dia Após o Outro Dia",
+            "artist": "Artist I",
+            "path": "music/Rap/nadacomoumdiaaposooutrodia.mp3",
+            "genre": "rap"
+        }
+    ],
+    "rock": [
+        {
+            "song_id": 9,
+            "title": "The First Time",
+            "artist": "Artist F",
+            "path": "music/Rock/thefirsttime.mp3",
+            "genre": "rock"
+        },
+        {
+            "song_id": 10,
+            "title": "I Am Mine",
+            "artist": "Artist J",
+            "path": "music/Rock/iammine.mp3",
+            "genre": "rock"
+        }
+    ],
+    "sertanejo": [
+        {
+            "song_id": 11,
+            "title": "Me Amar Amanhã",
+            "artist": "Artist G",
+            "path": "music/Sertanejo/meamaramanha.mp3",
+            "genre": "sertanejo"
+        },
+        {
+            "song_id": 12,
+            "title": "Olho Marrom",
+            "artist": "Artist K",
+            "path": "music/Sertanejo/olhomarrom.mp3",
+            "genre": "sertanejo"
+        }
+    ]
+}
