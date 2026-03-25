@@ -7,8 +7,9 @@ export default function TocandoAgora({ floor, onContinue, onBack }) {
     <View style={{
       flex: 1,
       backgroundColor: '#000',
-      justifyContent: 'center',
-      alignItems: 'center'
+      justifyContent: 'flex-end', // 🔥 joga tudo pra baixo
+      alignItems: 'center',
+      paddingBottom: 60 // 🔥 espaço do fundo
     }}>
 
       <Text style={{
