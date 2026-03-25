@@ -14,13 +14,26 @@ import {
   BackButton
 } from '../Css/stylesTocandoAgora';
 
+// objeto global em memória (não persiste se fechar o app)
+const likedSongs = {};
+
 export default function PlaylistScreen({ floor, onBack }) {
   const [songs, setSongs] = useState([]);
 
   useEffect(() => {
     fetch(`http://192.168.68.117:5000/playlist/${floor}`)
       .then(res => res.json())
-      .then(data => setSongs(data))
+      .then(data => {
+        // aplica likes já dados anteriormente
+        const updated = data.map(song => ({
+          ...song,
+          liked: !!likedSongs[song.song_id],
+          likes: likedSongs[song.song_id]
+            ? (song.likes || 0) + 1
+            : song.likes || 0
+        }));
+        setSongs(updated);
+      })
       .catch(err => console.error("Erro ao buscar playlist:", err));
   }, [floor]);
 
@@ -34,7 +47,6 @@ export default function PlaylistScreen({ floor, onBack }) {
     })
       .then(res => res.json())
       .then(() => {
-        // Atualiza localmente somando +1
         setSongs(prevSongs =>
           prevSongs.map(song =>
             song.song_id === songId
@@ -42,6 +54,7 @@ export default function PlaylistScreen({ floor, onBack }) {
               : song
           )
         );
+        likedSongs[songId] = true; // salva em memória
       })
       .catch(err => console.error("Erro ao adicionar like:", err));
   };
@@ -57,13 +70,13 @@ export default function PlaylistScreen({ floor, onBack }) {
 
         <LikesContainer>
           <TouchableOpacity
-            disabled={item.liked} // impede múltiplos likes
+            disabled={item.liked}
             onPress={() => handleLike(item.song_id)}
           >
             <Ionicons
               name="heart"
               size={18}
-              color={item.liked ? "#aaa" : "#ed145b"} // cinza se já tiver dado like
+              color={item.liked ? "#aaa" : "#ed145b"}
             />
           </TouchableOpacity>
           <LikesText>{item.likes}</LikesText>
