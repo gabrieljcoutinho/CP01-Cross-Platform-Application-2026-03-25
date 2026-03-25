@@ -11,7 +11,7 @@ export const Title = styled.Text`
   font-size: 22px;
   font-weight: bold;
   margin-bottom: 20px;
-  margin-top: 40px;   /* <-- espaço extra para descer o título */
+  margin-top: 40px;   /* desce o título */
   text-align: center;
 `;
 
@@ -42,6 +42,7 @@ export const Likes = styled.Text`
   color: #fff;
   font-size: 14px;
   margin-top: 5px;
+  align-self: flex-end;   /* <-- coração vai para a direita */
 `;
 
 export const BackButton = styled.TouchableOpacity`
