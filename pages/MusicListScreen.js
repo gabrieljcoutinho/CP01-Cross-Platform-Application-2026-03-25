@@ -5,13 +5,36 @@ import {
   TouchableOpacity,
   FlatList,
   SafeAreaView,
-  StatusBar
+  StatusBar,
+  Alert
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import musicDatabase from '../music/music.json';
 
-export default function MusicListScreen({ genre, onSelectMusic, onBack }) {
-  const musics = musicDatabase[genre] || [];
+export default function MusicListScreen({ genre, floor, onMusicAdded, onBack }) {
+  // Normaliza o gênero para acessar o JSON corretamente (ex: "Rock" -> "rock")
+  const genreKey = genre.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const musics = musicDatabase[genreKey] || [];
+
+  const handleAddMusic = async (songId) => {
+    try {
+      const response = await fetch(`http://192.168.68.117:5000/playlist/${floor}/${songId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+
+      if (response.ok) {
+        onMusicAdded(); // Volta para a tela TocandoAgora
+      } else {
+        Alert.alert("Erro", "Não foi possível adicionar a música.");
+      }
+    } catch (error) {
+      console.error(error);
+      Alert.alert("Erro de Conexão", "Servidor offline.");
+    }
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#050505' }}>
@@ -44,7 +67,7 @@ export default function MusicListScreen({ genre, onSelectMusic, onBack }) {
           <View>
             <Text style={{ color: '#888', fontSize: 12, letterSpacing: 1 }}>PLAYLIST</Text>
             <Text style={{ color: '#fff', fontSize: 26, fontWeight: 'bold' }}>
-              {genre.toUpperCase()}
+              {genre}
             </Text>
           </View>
         </View>
@@ -57,7 +80,7 @@ export default function MusicListScreen({ genre, onSelectMusic, onBack }) {
           renderItem={({ item, index }) => (
             <TouchableOpacity
               activeOpacity={0.8}
-              onPress={() => onSelectMusic(item)}
+              onPress={() => handleAddMusic(item.song_id)}
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
@@ -92,4 +115,4 @@ export default function MusicListScreen({ genre, onSelectMusic, onBack }) {
 }
 
 // Css da responsividade desse componente
-/* Use paddings dinâmicos baseados em Dimensions.get('window') se necessário */
+/* Use flex: 1 no container da lista e paddingBottom no contentContainerStyle para evitar corte em telas com notch */

@@ -28,7 +28,26 @@
       "playlist_id": "469800a2-63b7-4710-a8a1-79cae0d9bd59"
     }
   ],
-  "2": [],
+  "2": [
+    {
+      "song_id": 10,
+      "title": "I Am Mine",
+      "artist": "Artist J",
+      "path": "music/Rock/iammine.mp3",
+      "genre": "rock",
+      "likes": 0,
+      "playlist_id": "5950e48b-ad6d-4631-b357-376c81f816ad"
+    },
+    {
+      "song_id": 3,
+      "title": "Dopamina",
+      "artist": "Artist C",
+      "path": "music/Funk/dopamina.mp3",
+      "genre": "funk",
+      "likes": 0,
+      "playlist_id": "2e11860b-64c9-49f1-b65b-faea65bd8598"
+    }
+  ],
   "3": [],
   "4": [],
   "5": [

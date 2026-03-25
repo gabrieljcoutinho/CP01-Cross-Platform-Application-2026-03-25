@@ -21,15 +21,13 @@ export default function App() {
   const [selectedFloor, setSelectedFloor] = useState(null);
   const [selectedGenre, setSelectedGenre] = useState(null);
   const [showNowPlaying, setShowNowPlaying] = useState(false);
-  const [newMusicToAdd, setNewMusicToAdd] = useState(null);
 
   const handleUserRegistration = (user, password) => {
     setRegisteredUser({ user, password });
     setIsRegistering(false);
   };
 
-  const handleMusicSelection = (song) => {
-    setNewMusicToAdd(song);
+  const handleMusicAdded = () => {
     setSelectedGenre(null);
     setShowNowPlaying(true);
   };
@@ -59,7 +57,8 @@ export default function App() {
     return (
       <MusicListScreen
         genre={selectedGenre}
-        onSelectMusic={handleMusicSelection}
+        floor={selectedFloor}
+        onMusicAdded={handleMusicAdded}
         onBack={() => setSelectedGenre(null)}
       />
     );
@@ -69,8 +68,6 @@ export default function App() {
     return (
       <TocandoAgora
         floor={selectedFloor}
-        newMusic={newMusicToAdd}
-        onClearNewMusic={() => setNewMusicToAdd(null)}
         onAddMusic={() => setShowNowPlaying(false)}
         onBack={() => {
           setShowNowPlaying(false);
