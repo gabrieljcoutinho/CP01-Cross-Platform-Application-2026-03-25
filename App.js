@@ -7,11 +7,13 @@ import RegistrationScreen from './pages/RegistrationScreen';
 import RoomSelectionScreen from './pages/SelecionandoAsala';
 import VibeSelectionScreen from './pages/VibeSelectionScreen';
 import MusicListScreen from './pages/MusicListScreen';
+import TocandoAgora from './pages/TocandoAgora';
 
 import { useAppLoader } from './hook/useAppLoader';
 
 export default function App() {
   const isLoaded = useAppLoader(4000);
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
   const [registeredUser, setRegisteredUser] = useState(null);
@@ -19,15 +21,17 @@ export default function App() {
   const [floorStates, setFloorStates] = useState({});
   const [selectedFloor, setSelectedFloor] = useState(null);
 
-  // 🔥 NOVO STATE
   const [selectedGenre, setSelectedGenre] = useState(null);
+
+  // 🔥 NOVO STATE
+  const [showNowPlaying, setShowNowPlaying] = useState(false);
 
   const handleUserRegistration = (user, password) => {
     setRegisteredUser({ user, password });
     setIsRegistering(false);
   };
 
-  // 🔥 ALTERADO → agora abre lista de músicas
+  // 🔥 Quando escolhe vibe → vai pra lista
   const handleVibeSelection = (vibeName) => {
     setSelectedGenre(vibeName);
   };
@@ -53,7 +57,21 @@ export default function App() {
     );
   }
 
-  // 🔥 NOVA TELA (ANTES DE TUDO)
+  // 🔥 TELA NOVA (ANTES DE TUDO)
+  if (showNowPlaying && selectedFloor) {
+    return (
+      <TocandoAgora
+        floor={selectedFloor}
+        onContinue={() => setShowNowPlaying(false)}
+        onBack={() => {
+          setShowNowPlaying(false);
+          setSelectedFloor(null);
+        }}
+      />
+    );
+  }
+
+  // 🔥 LISTA DE MÚSICAS
   if (selectedGenre) {
     return (
       <MusicListScreen
@@ -63,6 +81,7 @@ export default function App() {
     );
   }
 
+  // 🔥 ESCOLHA DE VIBE
   if (selectedFloor) {
     return (
       <VibeSelectionScreen
@@ -74,10 +93,14 @@ export default function App() {
     );
   }
 
+  // 🔥 TELA INICIAL (ANDARES)
   return (
     <>
       <RoomSelectionScreen
-        onSelectFloor={(floor) => setSelectedFloor(floor)}
+        onSelectFloor={(floor) => {
+          setSelectedFloor(floor);
+          setShowNowPlaying(true); // 🔥 abre TocandoAgora primeiro
+        }}
         floorStates={floorStates}
       />
       <StatusBar style="light" />
