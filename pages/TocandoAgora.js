@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { FlatList, View, TouchableOpacity, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as S from '../Css/stylesTocandoAgora';
+import { API_URL } from "../services/api";
 
 // Controle local para evitar múltiplos likes na mesma sessão
 const sessionLikes = new Set();
@@ -11,7 +12,7 @@ export default function PlaylistScreen({ floor, onBack, onAddMusic }) {
 
   const loadPlaylist = async () => {
     try {
-      const response = await fetch(`http://192.168.68.117:5000/playlist/${floor}`);
+      const response = await fetch(`${API_URL}/playlist/${floor}`);
       const data = await response.json();
       setSongs(data);
     } catch (err) {
@@ -28,7 +29,7 @@ export default function PlaylistScreen({ floor, onBack, onAddMusic }) {
 
     try {
       // Método PUT usando o playlist_id único do objeto na playlist
-      const response = await fetch(`http://192.168.68.117:5000/playlist/${playlistId}`, {
+      const response = await fetch(`${API_URL}/playlist/${playlistId}`, {
         method: 'PUT',
       });
 
