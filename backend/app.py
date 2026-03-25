@@ -71,6 +71,20 @@ def like_song(playlist_id):
 
     return jsonify({"Erro": "Música não encontrada"}), 404
 
+@app.delete("/playlist/<playlist_id>")
+def delete_song(playlist_id):
+    playlist = _load_playlist()
+
+    for floor, songs in playlist.items():
+        matched = next((song for song in songs if song.get("playlist_id") == playlist_id), None)
+        if matched:
+            songs.remove(matched)
+            _save_playlist(playlist)
+            return jsonify({"message": "Música removida com sucesso"}), 200
+
+    return jsonify({"Erro": "Música não encontrada"}), 404
+
+
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
 
