@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Animated, TouchableWithoutFeedback, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as S from '../Css/styleVibeSelection';
@@ -12,20 +12,16 @@ const genres = [
   { id: '6', name: 'Pagode', img: require('../imgs/Samba.png') },
 ];
 
-const AnimatedCard = Animated.createAnimatedComponent(S.GenreCard);
-
-export default function VibeSelectionScreen({ onSelectVibe, floor, currentVibe, onBack }) {
-  const scaleAnims = useRef(genres.reduce((acc, g) => ({ ...acc, [g.name]: new Animated.Value(0) }), {})).current;
+export default function VibeSelectionScreen({ onSelectVibe, floor, onBack }) {
+  const fadeAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    genres.forEach(genre => {
-      Animated.spring(scaleAnims[genre.name], {
-        toValue: currentVibe === genre.name ? 1 : 0,
-        friction: 4,
-        useNativeDriver: true,
-      }).start();
-    });
-  }, [currentVibe]);
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: true
+    }).start();
+  }, []);
 
   return (
     <S.Container>
@@ -37,43 +33,35 @@ export default function VibeSelectionScreen({ onSelectVibe, floor, currentVibe, 
             <S.BackButtonCircle>
               <Ionicons name="chevron-back" size={28} color="#ed145b" />
             </S.BackButtonCircle>
-            <S.BackText>Sair do Andar {floor}</S.BackText>
+            <S.BackText>Voltar ao {floor}º Andar</S.BackText>
           </View>
         </TouchableWithoutFeedback>
       </S.BackButtonContainer>
 
       <S.ScrollArea>
-        <S.ContentWrapper>
-          <S.HeaderSection>
-            <S.TitleMain>Andar <S.TitleAccent>{floor}º</S.TitleAccent></S.TitleMain>
-            <S.Subtitle>Selecione um gênero para ver as músicas.</S.Subtitle>
-          </S.HeaderSection>
+        <Animated.View style={{ opacity: fadeAnim }}>
+          <S.ContentWrapper>
+            <S.HeaderSection>
+              <S.TitleMain>Andar <S.TitleAccent>{floor}º</S.TitleAccent></S.TitleMain>
+              <S.Subtitle>Qual a vibe de agora?</S.Subtitle>
+            </S.HeaderSection>
 
-          <S.GenreGrid>
-            {genres.map((item) => (
-              <AnimatedCard
-                key={item.id}
-                onPress={() => onSelectVibe(item.name)}
-                style={{
-                  transform: [{
-                    scale: scaleAnims[item.name].interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [1, 1.05]
-                    })
-                  }],
-                  borderColor: currentVibe === item.name ? '#ed145b' : 'rgba(255,255,255,0.05)'
-                }}
-              >
-                <S.GenreImage source={item.img} />
-                <S.CardOverlay colors={['transparent', 'rgba(0,0,0,0.9)']}>
-                  <S.GenreTitle>{item.name.toUpperCase()}</S.GenreTitle>
-                </S.CardOverlay>
-                {currentVibe === item.name && <S.ActiveMarker />}
-              </AnimatedCard>
-            ))}
-          </S.GenreGrid>
-        </S.ContentWrapper>
+            <S.GenreGrid>
+              {genres.map((item) => (
+                <S.GenreCard key={item.id} onPress={() => onSelectVibe(item.name)}>
+                  <S.GenreImage source={item.img} />
+                  <S.CardOverlay colors={['transparent', 'rgba(13, 13, 13, 0.9)']}>
+                    <S.GenreTitle>{item.name.toUpperCase()}</S.GenreTitle>
+                  </S.CardOverlay>
+                </S.GenreCard>
+              ))}
+            </S.GenreGrid>
+          </S.ContentWrapper>
+        </Animated.View>
       </S.ScrollArea>
     </S.Container>
   );
 }
+
+// Css da responsividade desse componente
+/* No styleVibeSelection.js, o GenreGrid deve usar flex-wrap: wrap e justify-content: space-around para se adaptar a tablets e celulares. */

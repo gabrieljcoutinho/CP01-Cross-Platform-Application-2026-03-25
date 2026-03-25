@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, View, TouchableOpacity } from 'react-native';
+import { FlatList, View, TouchableOpacity, Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import {
   Container,
@@ -14,76 +14,62 @@ import {
   BackButton
 } from '../Css/stylesTocandoAgora';
 
-// objeto global em memória (não persiste se fechar o app)
 const likedSongs = {};
 
-export default function PlaylistScreen({ floor, onBack, onAddMusic }) {
+export default function PlaylistScreen({ floor, onBack, onAddMusic, newMusic, onClearNewMusic }) {
   const [songs, setSongs] = useState([]);
+  const pulseAnim = new Animated.Value(1);
 
   useEffect(() => {
     fetch(`http://192.168.68.117:5000/playlist/${floor}`)
       .then(res => res.json())
       .then(data => {
-        // aplica likes já dados anteriormente
         const updated = data.map(song => ({
           ...song,
           liked: !!likedSongs[song.song_id],
-          likes: likedSongs[song.song_id]
-            ? (song.likes || 0) + 1
-            : song.likes || 0
+          likes: likedSongs[song.song_id] ? (song.likes || 0) + 1 : song.likes || 0
         }));
         setSongs(updated);
+
+        if (newMusic) {
+          handlePostNewMusic(newMusic);
+        }
       })
       .catch(err => console.error("Erro ao buscar playlist:", err));
-  }, [floor]);
+  }, [floor, newMusic]);
+
+  const handlePostNewMusic = (music) => {
+    fetch(`http://192.168.68.117:5000/playlist`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...music, floor })
+    })
+    .then(() => {
+      setSongs(prev => [music, ...prev]);
+      onClearNewMusic();
+    })
+    .catch(err => console.error(err));
+  };
 
   const handleLike = (songId) => {
     fetch(`http://192.168.68.117:5000/playlist/${songId}`, {
       method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ like: true }),
     })
-      .then(res => res.json())
-      .then(() => {
-        setSongs(prevSongs =>
-          prevSongs.map(song =>
-            song.song_id === songId
-              ? { ...song, likes: (song.likes || 0) + 1, liked: true }
-              : song
-          )
-        );
-        likedSongs[songId] = true; // salva em memória
-      })
-      .catch(err => console.error("Erro ao adicionar like:", err));
+    .then(() => {
+      setSongs(prev => prev.map(s => s.song_id === songId ? { ...s, likes: (s.likes || 0) + 1, liked: true } : s));
+      likedSongs[songId] = true;
+    });
   };
 
-  const renderSong = ({ item }) => (
-    <Card>
-      <Row>
-        <View>
-          <SongTitle>{item.title}</SongTitle>
-          <Artist>{item.artist}</Artist>
-          <Genre>{item.genre}</Genre>
-        </View>
-
-        <LikesContainer>
-          <TouchableOpacity
-            disabled={item.liked}
-            onPress={() => handleLike(item.song_id)}
-          >
-            <Ionicons
-              name="heart"
-              size={18}
-              color={item.liked ? "#aaa" : "#ed145b"}
-            />
-          </TouchableOpacity>
-          <LikesText>{item.likes}</LikesText>
-        </LikesContainer>
-      </Row>
-    </Card>
-  );
+  const startPulse = () => {
+    Animated.sequence([
+      Animated.timing(pulseAnim, { toValue: 1.2, duration: 200, useNativeDriver: true }),
+      Animated.spring(pulseAnim, { toValue: 1, friction: 3, useNativeDriver: true })
+    ]).start();
+    onAddMusic();
+  };
 
   return (
     <Container>
@@ -95,27 +81,49 @@ export default function PlaylistScreen({ floor, onBack, onAddMusic }) {
 
       <FlatList
         data={songs}
-        keyExtractor={(item) => item.song_id.toString()}
-        renderItem={renderSong}
-        showsVerticalScrollIndicator={false}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }) => (
+          <Card>
+            <Row>
+              <View>
+                <SongTitle>{item.title}</SongTitle>
+                <Artist>{item.artist}</Artist>
+                <Genre>{item.genre}</Genre>
+              </View>
+              <LikesContainer>
+                <TouchableOpacity disabled={item.liked} onPress={() => handleLike(item.song_id)}>
+                  <Ionicons name="heart" size={18} color={item.liked ? "#aaa" : "#ed145b"} />
+                </TouchableOpacity>
+                <LikesText>{item.likes}</LikesText>
+              </LikesContainer>
+            </Row>
+          </Card>
+        )}
       />
 
-      {/* 🔥 Botão redondo com símbolo "+" */}
-      <TouchableOpacity
-        style={{
-          marginTop: 15,
-          width: 45,
-          height: 45,
-          borderRadius: 22.5,
-          backgroundColor: "#ed145b",
-          alignItems: "center",
-          justifyContent: "center",
-          alignSelf: "center",
-        }}
-        onPress={onAddMusic}
-      >
-        <Ionicons name="add" size={28} color="#fff" />
-      </TouchableOpacity>
+      <Animated.View style={{ transform: [{ scale: pulseAnim }], alignSelf: 'center', marginBottom: 20 }}>
+        <TouchableOpacity
+          style={{
+            width: 60,
+            height: 60,
+            borderRadius: 30,
+            backgroundColor: "#ed145b",
+            alignItems: "center",
+            justifyContent: "center",
+            elevation: 10,
+            shadowColor: "#ed145b",
+            shadowOffset: { width: 0, height: 0 },
+            shadowOpacity: 0.8,
+            shadowRadius: 10
+          }}
+          onPress={startPulse}
+        >
+          <Ionicons name="add" size={35} color="#fff" />
+        </TouchableOpacity>
+      </Animated.View>
     </Container>
   );
 }
+
+// Css da responsividade desse componente
+/* Utilize o FlatList com contentContainerStyle para garantir padding em telas menores. */

@@ -18,18 +18,20 @@ export default function App() {
   const [isRegistering, setIsRegistering] = useState(false);
   const [registeredUser, setRegisteredUser] = useState(null);
 
-  const [floorStates, setFloorStates] = useState({});
   const [selectedFloor, setSelectedFloor] = useState(null);
   const [selectedGenre, setSelectedGenre] = useState(null);
   const [showNowPlaying, setShowNowPlaying] = useState(false);
+  const [newMusicToAdd, setNewMusicToAdd] = useState(null);
 
   const handleUserRegistration = (user, password) => {
     setRegisteredUser({ user, password });
     setIsRegistering(false);
   };
 
-  const handleVibeSelection = (vibeName) => {
-    setSelectedGenre(vibeName);
+  const handleMusicSelection = (song) => {
+    setNewMusicToAdd(song);
+    setSelectedGenre(null);
+    setShowNowPlaying(true);
   };
 
   if (!isLoaded) return <LoadingScreen />;
@@ -53,23 +55,24 @@ export default function App() {
     );
   }
 
-  // 1. TELA DE MÚSICAS DO GÊNERO (Nível mais profundo)
   if (selectedGenre) {
     return (
       <MusicListScreen
         genre={selectedGenre}
+        floor={selectedFloor}
+        onSelectMusic={handleMusicSelection}
         onBack={() => setSelectedGenre(null)}
       />
     );
   }
 
-  // 2. TELA TOCANDO AGORA (Sobrepõe a seleção de vibe)
   if (showNowPlaying && selectedFloor) {
     return (
       <TocandoAgora
         floor={selectedFloor}
-        onContinue={() => setShowNowPlaying(false)}
-        onAddMusic={() => setShowNowPlaying(false)} // Redireciona para VibeSelection
+        newMusic={newMusicToAdd}
+        onClearNewMusic={() => setNewMusicToAdd(null)}
+        onAddMusic={() => setShowNowPlaying(false)}
         onBack={() => {
           setShowNowPlaying(false);
           setSelectedFloor(null);
@@ -78,19 +81,19 @@ export default function App() {
     );
   }
 
-  // 3. TELA DE SELEÇÃO DE VIBE (Aparece quando showNowPlaying é false)
   if (selectedFloor) {
     return (
       <VibeSelectionScreen
         floor={selectedFloor}
-        onBack={() => setSelectedFloor(null)}
-        onSelectVibe={handleVibeSelection}
-        currentVibe={floorStates[selectedFloor]}
+        onBack={() => {
+          setSelectedFloor(selectedFloor);
+          setShowNowPlaying(true);
+        }}
+        onSelectVibe={(genre) => setSelectedGenre(genre)}
       />
     );
   }
 
-  // 4. TELA INICIAL (ANDARES)
   return (
     <>
       <RoomSelectionScreen
@@ -98,7 +101,6 @@ export default function App() {
           setSelectedFloor(floor);
           setShowNowPlaying(true);
         }}
-        floorStates={floorStates}
       />
       <StatusBar style="light" />
     </>

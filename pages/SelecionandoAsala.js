@@ -4,7 +4,7 @@ import * as S from '../Css/styleEscolhaDeSala';
 
 const { width } = Dimensions.get('window');
 
-const FloorButton = ({ level, index, onSelectFloor, activeVibe }) => {
+const FloorButton = ({ level, index, onSelectFloor }) => {
   const animatedValue = useRef(new Animated.Value(0)).current;
   const hoverValue = useRef(new Animated.Value(0)).current;
   const pressScale = useRef(new Animated.Value(1)).current;
@@ -54,21 +54,13 @@ const FloorButton = ({ level, index, onSelectFloor, activeVibe }) => {
       >
         <S.ButtonContainer>
           <S.GlowLayer style={{
-            opacity: activeVibe ? 0.7 : hoverValue.interpolate({
+            opacity: hoverValue.interpolate({
               inputRange: [0, 1],
               outputRange: [0, 0.4]
             }),
-            backgroundColor: activeVibe ? '#ed145b' : '#00f2ff'
+            backgroundColor: '#ed145b'
           }} />
-          <S.GlassCard style={{ borderColor: activeVibe ? '#ed145b' : 'rgba(255,255,255,0.1)' }}>
-            <S.ScanLine style={{
-              transform: [{
-                translateX: hoverValue.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [-width, 0]
-                })
-              }]
-            }} />
+          <S.GlassCard>
             <S.CardContent>
               <S.InfoArea>
                 <S.RoomIndex>Unidade paulista</S.RoomIndex>
@@ -82,7 +74,7 @@ const FloorButton = ({ level, index, onSelectFloor, activeVibe }) => {
   );
 };
 
-export default function RoomSelectionScreen({ onSelectFloor, floorStates = {} }) {
+export default function RoomSelectionScreen({ onSelectFloor }) {
   const data = [1, 2, 3, 4, 5, 6, 7];
 
   return (
@@ -107,7 +99,6 @@ export default function RoomSelectionScreen({ onSelectFloor, floorStates = {} })
               level={level}
               index={index}
               onSelectFloor={onSelectFloor}
-              activeVibe={floorStates[level]}
             />
           ))}
         </S.MenuGrid>
@@ -115,3 +106,6 @@ export default function RoomSelectionScreen({ onSelectFloor, floorStates = {} })
     </S.Container>
   );
 }
+
+// Css da responsividade desse componente
+/* No styleEscolhaDeSala.js, utilize styled-components com width: 100% e gap flexível para se ajustar a diferentes larguras de tela. */
