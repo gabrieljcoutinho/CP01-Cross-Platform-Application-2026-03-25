@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, View } from 'react-native';
+import { FlatList, View, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import {
   Container,
@@ -24,6 +24,27 @@ export default function PlaylistScreen({ floor, onBack }) {
       .catch(err => console.error("Erro ao buscar playlist:", err));
   }, [floor]);
 
+  const handleLike = (songId) => {
+    fetch(`http://192.168.68.117:5000/playlist/${songId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ like: true }),
+    })
+      .then(res => res.json())
+      .then(updatedSong => {
+        setSongs(prevSongs =>
+          prevSongs.map(song =>
+            song.song_id === songId
+              ? { ...song, likes: updatedSong.likes, liked: true }
+              : song
+          )
+        );
+      })
+      .catch(err => console.error("Erro ao adicionar like:", err));
+  };
+
   const renderSong = ({ item }) => (
     <Card>
       <Row>
@@ -34,7 +55,16 @@ export default function PlaylistScreen({ floor, onBack }) {
         </View>
 
         <LikesContainer>
-          <Ionicons name="heart" size={18} color="#ed145b" />
+          <TouchableOpacity
+            disabled={item.liked} // impede múltiplos likes
+            onPress={() => handleLike(item.song_id)}
+          >
+            <Ionicons
+              name="heart"
+              size={18}
+              color={item.liked ? "#aaa" : "#ed145b"} // cinza se já tiver dado like
+            />
+          </TouchableOpacity>
           <LikesText>{item.likes}</LikesText>
         </LikesContainer>
       </Row>
