@@ -20,10 +20,7 @@ export default function App() {
 
   const [floorStates, setFloorStates] = useState({});
   const [selectedFloor, setSelectedFloor] = useState(null);
-
   const [selectedGenre, setSelectedGenre] = useState(null);
-
-  // 🔥 NOVO STATE
   const [showNowPlaying, setShowNowPlaying] = useState(false);
 
   const handleUserRegistration = (user, password) => {
@@ -31,7 +28,6 @@ export default function App() {
     setIsRegistering(false);
   };
 
-  // 🔥 Quando escolhe vibe → vai pra lista
   const handleVibeSelection = (vibeName) => {
     setSelectedGenre(vibeName);
   };
@@ -57,21 +53,7 @@ export default function App() {
     );
   }
 
-  // 🔥 TELA NOVA (ANTES DE TUDO)
-  if (showNowPlaying && selectedFloor) {
-    return (
-      <TocandoAgora
-        floor={selectedFloor}
-        onContinue={() => setShowNowPlaying(false)}
-        onBack={() => {
-          setShowNowPlaying(false);
-          setSelectedFloor(null);
-        }}
-      />
-    );
-  }
-
-  // 🔥 LISTA DE MÚSICAS
+  // 1. TELA DE MÚSICAS DO GÊNERO (Nível mais profundo)
   if (selectedGenre) {
     return (
       <MusicListScreen
@@ -81,7 +63,22 @@ export default function App() {
     );
   }
 
-  // 🔥 ESCOLHA DE VIBE
+  // 2. TELA TOCANDO AGORA (Sobrepõe a seleção de vibe)
+  if (showNowPlaying && selectedFloor) {
+    return (
+      <TocandoAgora
+        floor={selectedFloor}
+        onContinue={() => setShowNowPlaying(false)}
+        onAddMusic={() => setShowNowPlaying(false)} // Redireciona para VibeSelection
+        onBack={() => {
+          setShowNowPlaying(false);
+          setSelectedFloor(null);
+        }}
+      />
+    );
+  }
+
+  // 3. TELA DE SELEÇÃO DE VIBE (Aparece quando showNowPlaying é false)
   if (selectedFloor) {
     return (
       <VibeSelectionScreen
@@ -93,13 +90,13 @@ export default function App() {
     );
   }
 
-  // 🔥 TELA INICIAL (ANDARES)
+  // 4. TELA INICIAL (ANDARES)
   return (
     <>
       <RoomSelectionScreen
         onSelectFloor={(floor) => {
           setSelectedFloor(floor);
-          setShowNowPlaying(true); // 🔥 abre TocandoAgora primeiro
+          setShowNowPlaying(true);
         }}
         floorStates={floorStates}
       />
