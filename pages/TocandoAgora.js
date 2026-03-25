@@ -61,3 +61,5 @@ export default function PlaylistScreen({ floor, onBack, onAddMusic }) {
   );
 }
 
+// Css da responsividade desse componente
+/* Garanta que o botão de adicionar tenha um z-index alto e margem inferior segura para diferentes modelos de iPhone/Android */

@@ -46,6 +46,15 @@
       "genre": "funk",
       "likes": 0,
       "playlist_id": "2e11860b-64c9-49f1-b65b-faea65bd8598"
+    },
+    {
+      "song_id": 4,
+      "title": "Vida Tá de Mais",
+      "artist": "Artist C",
+      "path": "music/Funk/vidatademais.mp3",
+      "genre": "funk",
+      "likes": 0,
+      "playlist_id": "d44c3f7d-0857-45d2-b0f2-6df577f2a2f8"
     }
   ],
   "3": [],
