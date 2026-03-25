@@ -53,6 +53,7 @@ def add_song(floor, song_id):
     song["likes"] = 0
     song["playlist_id"] = str(uuid.uuid4())
     playlist = _load_playlist()
+    playlist.setdefault(floor, [])
     playlist[floor].append(song)
     _save_playlist(playlist)
     return jsonify(song), 201
@@ -86,5 +87,4 @@ def delete_song(playlist_id):
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
-
+    app.run(host="0.0.0.0", port=5000, debug=True)
