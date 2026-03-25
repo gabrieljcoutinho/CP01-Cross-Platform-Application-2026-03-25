@@ -16,7 +16,9 @@ export default function PlaylistScreen({ floor, onBack }) {
   const [songs, setSongs] = useState([]);
 
   useEffect(() => {
+
     fetch(`http://192.168.68.117:5000/playlist/${floor}`)
+
       .then(res => res.json())
       .then(data => setSongs(data))
       .catch(err => console.error("Erro ao buscar playlist:", err));
