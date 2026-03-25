@@ -83,6 +83,9 @@
   <br><em> Nota: Tanto o node quanto o JDK devem ser utilizados na versão LTS </em>
 </ol>
 
+## Vídeo Funcional do App
+https://github.com/user-attachments/assets/d8809a4b-93c4-481f-bdf9-03edd90ab631
+
 ## Decisões Técnicas
 ### Estrutura do projeto
 <p>
