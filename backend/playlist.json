@@ -67,15 +67,6 @@
       "genre": "pagode",
       "likes": 0,
       "playlist_id": "96a788f8-aeaf-4114-9662-4e4ba97528d7"
-    },
-    {
-      "song_id": 8,
-      "title": "Nada Como um Dia Após o Outro Dia",
-      "artist": "Artist I",
-      "path": "music/Rap/nadacomoumdiaaposooutrodia.mp3",
-      "genre": "rap",
-      "likes": 0,
-      "playlist_id": "96b6b637-e234-482c-834c-6ce3581e8e60"
     }
   ],
   "6": [],

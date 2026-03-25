@@ -33,11 +33,12 @@ export default function PlaylistScreen({ floor, onBack }) {
       body: JSON.stringify({ like: true }),
     })
       .then(res => res.json())
-      .then(updatedSong => {
+      .then(() => {
+        // Atualiza localmente somando +1
         setSongs(prevSongs =>
           prevSongs.map(song =>
             song.song_id === songId
-              ? { ...song, likes: updatedSong.likes, liked: true }
+              ? { ...song, likes: (song.likes || 0) + 1, liked: true }
               : song
           )
         );
