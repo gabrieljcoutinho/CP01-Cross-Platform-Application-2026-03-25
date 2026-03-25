@@ -91,7 +91,7 @@ export default function PlaylistScreen({ floor, onBack, onAddMusic }) {
         <Ionicons name="arrow-back" size={24} color="#fff" />
       </BackButton>
 
-      <Title>🎧 Tocando no {floor}º andar</Title>
+      <Title>🎧 {floor}º andar</Title>
 
       <FlatList
         data={songs}
