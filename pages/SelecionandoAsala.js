@@ -108,4 +108,4 @@ export default function RoomSelectionScreen({ onSelectFloor }) {
 }
 
 // Css da responsividade desse componente
-/* No styleEscolhaDeSala.js, utilize styled-components com width: 100% e gap flexível para se ajustar a diferentes larguras de tela. */
+/* Use flex-direction: column para mobile e ajuste padding conforme width */

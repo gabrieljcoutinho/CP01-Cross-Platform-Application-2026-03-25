@@ -59,7 +59,6 @@ export default function App() {
     return (
       <MusicListScreen
         genre={selectedGenre}
-        floor={selectedFloor}
         onSelectMusic={handleMusicSelection}
         onBack={() => setSelectedGenre(null)}
       />
@@ -85,11 +84,8 @@ export default function App() {
     return (
       <VibeSelectionScreen
         floor={selectedFloor}
-        onBack={() => {
-          setSelectedFloor(selectedFloor);
-          setShowNowPlaying(true);
-        }}
         onSelectVibe={(genre) => setSelectedGenre(genre)}
+        onBack={() => setShowNowPlaying(true)}
       />
     );
   }

@@ -8,47 +8,19 @@ import {
   StatusBar
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import musicDatabase from '../music/music.json';
 
-const musicDatabase = {
-  Rock: [
-    { id: '1', title: 'Bohemian Rhapsody', artist: 'Queen' },
-    { id: '2', title: 'Smells Like Teen Spirit', artist: 'Nirvana' },
-  ],
-  Eletrônico: [
-    { id: '1', title: 'Animals', artist: 'Martin Garrix' },
-    { id: '2', title: 'Levels', artist: 'Avicii' },
-  ],
-  Sertanejo: [
-    { id: '1', title: 'Evidências', artist: 'Chitãozinho & Xororó' },
-    { id: '2', title: 'A Maior Saudade', artist: 'Henrique & Juliano' },
-  ],
-  Funk: [
-    { id: '1', title: 'Baile de Favela', artist: 'MC João' },
-    { id: '2', title: 'Bum Bum Tam Tam', artist: 'MC Fioti' },
-  ],
-  Rap: [
-    { id: '1', title: 'Lose Yourself', artist: 'Eminem' },
-    { id: '2', title: 'Vida Loka Pt. 2', artist: 'Racionais MCs' },
-  ],
-  Pagode: [
-    { id: '1', title: 'Deixa Acontecer', artist: 'Revelação' },
-    { id: '2', title: 'Tá Vendo Aquela Lua', artist: 'Exaltasamba' },
-  ],
-};
-
-export default function MusicListScreen({ genre, onBack }) {
+export default function MusicListScreen({ genre, onSelectMusic, onBack }) {
   const musics = musicDatabase[genre] || [];
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#050505' }}>
-
       <View style={{
         flex: 1,
         paddingHorizontal: 20,
-        paddingTop: StatusBar.currentHeight || 30 // 🔥 CORREÇÃO REAL
+        paddingTop: StatusBar.currentHeight || 30
       }}>
 
-        {/* 🔥 HEADER DESCIDO */}
         <View style={{
           flexDirection: 'row',
           alignItems: 'center',
@@ -70,33 +42,22 @@ export default function MusicListScreen({ genre, onBack }) {
           </TouchableOpacity>
 
           <View>
-            <Text style={{
-              color: '#888',
-              fontSize: 12,
-              letterSpacing: 1
-            }}>
-              PLAYLIST
-            </Text>
-
-            <Text style={{
-              color: '#fff',
-              fontSize: 26,
-              fontWeight: 'bold'
-            }}>
-              {genre}
+            <Text style={{ color: '#888', fontSize: 12, letterSpacing: 1 }}>PLAYLIST</Text>
+            <Text style={{ color: '#fff', fontSize: 26, fontWeight: 'bold' }}>
+              {genre.toUpperCase()}
             </Text>
           </View>
         </View>
 
-        {/* LISTA */}
         <FlatList
           data={musics}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.song_id.toString()}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 20 }}
           renderItem={({ item, index }) => (
             <TouchableOpacity
               activeOpacity={0.8}
+              onPress={() => onSelectMusic(item)}
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
@@ -108,38 +69,27 @@ export default function MusicListScreen({ genre, onBack }) {
                 borderColor: 'rgba(255,255,255,0.05)'
               }}
             >
-              <Text style={{
-                color: '#ed145b',
-                fontSize: 16,
-                width: 30
-              }}>
+              <Text style={{ color: '#ed145b', fontSize: 16, width: 30 }}>
                 {index + 1}
               </Text>
 
               <View style={{ flex: 1 }}>
-                <Text style={{
-                  color: '#fff',
-                  fontSize: 16,
-                  fontWeight: '600'
-                }}>
+                <Text style={{ color: '#fff', fontSize: 16, fontWeight: '600' }}>
                   {item.title}
                 </Text>
-
-                <Text style={{
-                  color: '#888',
-                  fontSize: 13,
-                  marginTop: 2
-                }}>
+                <Text style={{ color: '#888', fontSize: 13, marginTop: 2 }}>
                   {item.artist}
                 </Text>
               </View>
 
-              <Ionicons name="play-circle" size={28} color="#ed145b" />
+              <Ionicons name="add-circle" size={28} color="#ed145b" />
             </TouchableOpacity>
           )}
         />
-
       </View>
     </SafeAreaView>
   );
 }
+
+// Css da responsividade desse componente
+/* Use paddings dinâmicos baseados em Dimensions.get('window') se necessário */
