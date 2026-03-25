@@ -17,7 +17,7 @@ import {
 // objeto global em memória (não persiste se fechar o app)
 const likedSongs = {};
 
-export default function PlaylistScreen({ floor, onBack }) {
+export default function PlaylistScreen({ floor, onBack, onAddMusic }) {
   const [songs, setSongs] = useState([]);
 
   useEffect(() => {
@@ -99,6 +99,23 @@ export default function PlaylistScreen({ floor, onBack }) {
         renderItem={renderSong}
         showsVerticalScrollIndicator={false}
       />
+
+      {/* 🔥 Botão redondo com símbolo "+" */}
+      <TouchableOpacity
+        style={{
+          marginTop: 15,
+          width: 45,
+          height: 45,
+          borderRadius: 22.5,
+          backgroundColor: "#ed145b",
+          alignItems: "center",
+          justifyContent: "center",
+          alignSelf: "center",
+        }}
+        onPress={onAddMusic}
+      >
+        <Ionicons name="add" size={28} color="#fff" />
+      </TouchableOpacity>
     </Container>
   );
 }
