@@ -76,6 +76,7 @@
   <li> Acesse a pasta do projeto: cd CP1-APP-Ficticio </li>
   <li> Instale as dependências do projeto: npm install </li>
   <li> Crie e inicie um dispositivo virtual (AVD) no Android Studio (Pixel 5 ou similar) </li>
+  <li> Acione o backend digitando: cd backend & pip install -r requirements.txt & flask run </li>
   <li> Inicie o projeto com Expo: npx expo start </li>
   <li> Com o Expo aberto no terminal pressione <strong>a</strong> para abrir no emulador Android ou escaneie o QR Code com o app <strong>Expo Go</strong> no seu celular
   </li>
