@@ -2,24 +2,38 @@ import styled from 'styled-components/native';
 
 export const Container = styled.View`
   flex: 1;
-  background-color: #000;
+  background-color: #0d0d0d;
   padding: 20px;
 `;
 
 export const Title = styled.Text`
   color: #fff;
-  font-size: 22px;
+  font-size: 24px;
   font-weight: bold;
-  margin-bottom: 20px;
-  margin-top: 40px;   /* desce o título */
+  margin: 60px 0 25px;
   text-align: center;
+  letter-spacing: 1px;
 `;
 
 export const Card = styled.View`
-  background-color: #1c1c1c;
-  padding: 15px;
-  border-radius: 10px;
+  background-color: #1a1a1a;
+  padding: 18px;
+  border-radius: 16px;
   margin-bottom: 15px;
+
+  border: 1px solid rgba(255,255,255,0.05);
+
+  shadow-color: #000;
+  shadow-offset: 0px 4px;
+  shadow-opacity: 0.4;
+  shadow-radius: 6px;
+  elevation: 6;
+`;
+
+export const Row = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 export const SongTitle = styled.Text`
@@ -30,22 +44,36 @@ export const SongTitle = styled.Text`
 
 export const Artist = styled.Text`
   color: #fff;
-  font-size: 16px;
+  font-size: 15px;
+  margin-top: 3px;
 `;
 
 export const Genre = styled.Text`
-  color: #aaa;
-  font-size: 14px;
+  color: #888;
+  font-size: 13px;
+  margin-top: 2px;
 `;
 
-export const Likes = styled.Text`
+export const LikesContainer = styled.View`
+  flex-direction: row;
+  align-items: center;
+  background-color: rgba(237,20,91,0.1);
+  padding: 6px 10px;
+  border-radius: 20px;
+`;
+
+export const LikesText = styled.Text`
   color: #fff;
+  margin-left: 6px;
   font-size: 14px;
-  margin-top: 5px;
-  align-self: flex-end;   /* <-- coração vai para a direita */
 `;
 
 export const BackButton = styled.TouchableOpacity`
-  margin-top: 20px;
-  align-self: center;
+  position: absolute;
+  top: 40px;
+  left: 20px;
+
+  background-color: rgba(255,255,255,0.1);
+  padding: 10px;
+  border-radius: 50px;
 `;

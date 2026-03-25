@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import {
   Container,
@@ -8,7 +8,9 @@ import {
   SongTitle,
   Artist,
   Genre,
-  Likes,
+  Row,
+  LikesContainer,
+  LikesText,
   BackButton
 } from '../Css/stylesTocandoAgora';
 
@@ -24,26 +26,35 @@ export default function PlaylistScreen({ floor, onBack }) {
 
   const renderSong = ({ item }) => (
     <Card>
-      <SongTitle>{item.title}</SongTitle>
-      <Artist>{item.artist}</Artist>
-      <Genre>{item.genre}</Genre>
-      <Likes>❤️ {item.likes}</Likes>
+      <Row>
+        <View>
+          <SongTitle>{item.title}</SongTitle>
+          <Artist>{item.artist}</Artist>
+          <Genre>{item.genre}</Genre>
+        </View>
+
+        <LikesContainer>
+          <Ionicons name="heart" size={18} color="#ed145b" />
+          <LikesText>{item.likes}</LikesText>
+        </LikesContainer>
+      </Row>
     </Card>
   );
 
   return (
     <Container>
-      <Title>Tocando agora no {floor}º andar 🎵</Title>
+      <BackButton onPress={onBack}>
+        <Ionicons name="arrow-back" size={24} color="#fff" />
+      </BackButton>
+
+      <Title>🎧 Tocando no {floor}º andar</Title>
 
       <FlatList
         data={songs}
         keyExtractor={(item) => item.song_id.toString()}
         renderItem={renderSong}
+        showsVerticalScrollIndicator={false}
       />
-
-      <BackButton onPress={onBack}>
-        <Ionicons name="arrow-back" size={28} color="#fff" />
-      </BackButton>
     </Container>
   );
 }
