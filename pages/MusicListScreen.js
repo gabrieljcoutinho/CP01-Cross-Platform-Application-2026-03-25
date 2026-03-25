@@ -1,82 +1,48 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  FlatList,
-  SafeAreaView,
-  StatusBar,
-  Alert
-} from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, SafeAreaView, StatusBar, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import musicDatabase from '../music/music.json';
 
 export default function MusicListScreen({ genre, floor, onMusicAdded, onBack }) {
-  // Normaliza o gênero para acessar o JSON corretamente (ex: "Rock" -> "rock")
   const genreKey = genre.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   const musics = musicDatabase[genreKey] || [];
 
   const handleAddMusic = async (songId) => {
     try {
+      // POST para criar a música na playlist do andar
       const response = await fetch(`http://192.168.68.117:5000/playlist/${floor}/${songId}`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        }
       });
 
       if (response.ok) {
-        onMusicAdded(); // Volta para a tela TocandoAgora
+        const createdObj = await response.json();
+        // O createdObj contém o playlist_id gerado
+        onMusicAdded();
       } else {
         Alert.alert("Erro", "Não foi possível adicionar a música.");
       }
     } catch (error) {
       console.error(error);
-      Alert.alert("Erro de Conexão", "Servidor offline.");
+      Alert.alert("Erro", "Falha na conexão com o servidor.");
     }
   };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#050505' }}>
-      <View style={{
-        flex: 1,
-        paddingHorizontal: 20,
-        paddingTop: StatusBar.currentHeight || 30
-      }}>
-
-        <View style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          marginBottom: 25
-        }}>
-          <TouchableOpacity
-            onPress={onBack}
-            style={{
-              width: 44,
-              height: 44,
-              borderRadius: 22,
-              backgroundColor: '#111',
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginRight: 15
-            }}
-          >
+      <View style={{ flex: 1, paddingHorizontal: 20, paddingTop: StatusBar.currentHeight || 30 }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 25 }}>
+          <TouchableOpacity onPress={onBack} style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: '#111', alignItems: 'center', justifyContent: 'center', marginRight: 15 }}>
             <Ionicons name="chevron-back" size={24} color="#ed145b" />
           </TouchableOpacity>
-
           <View>
-            <Text style={{ color: '#888', fontSize: 12, letterSpacing: 1 }}>PLAYLIST</Text>
-            <Text style={{ color: '#fff', fontSize: 26, fontWeight: 'bold' }}>
-              {genre}
-            </Text>
+            <Text style={{ color: '#888', fontSize: 12, letterSpacing: 1 }}>ADICIONAR AO {floor}º ANDAR</Text>
+            <Text style={{ color: '#fff', fontSize: 26, fontWeight: 'bold' }}>{genre}</Text>
           </View>
         </View>
 
         <FlatList
           data={musics}
           keyExtractor={(item) => item.song_id.toString()}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: 20 }}
           renderItem={({ item, index }) => (
             <TouchableOpacity
               activeOpacity={0.8}
@@ -92,19 +58,11 @@ export default function MusicListScreen({ genre, floor, onMusicAdded, onBack }) 
                 borderColor: 'rgba(255,255,255,0.05)'
               }}
             >
-              <Text style={{ color: '#ed145b', fontSize: 16, width: 30 }}>
-                {index + 1}
-              </Text>
-
+              <Text style={{ color: '#ed145b', fontSize: 16, width: 30 }}>{index + 1}</Text>
               <View style={{ flex: 1 }}>
-                <Text style={{ color: '#fff', fontSize: 16, fontWeight: '600' }}>
-                  {item.title}
-                </Text>
-                <Text style={{ color: '#888', fontSize: 13, marginTop: 2 }}>
-                  {item.artist}
-                </Text>
+                <Text style={{ color: '#fff', fontSize: 16, fontWeight: '600' }}>{item.title}</Text>
+                <Text style={{ color: '#888', fontSize: 13, marginTop: 2 }}>{item.artist}</Text>
               </View>
-
               <Ionicons name="add-circle" size={28} color="#ed145b" />
             </TouchableOpacity>
           )}
@@ -115,4 +73,4 @@ export default function MusicListScreen({ genre, floor, onMusicAdded, onBack }) 
 }
 
 // Css da responsividade desse componente
-/* Use flex: 1 no container da lista e paddingBottom no contentContainerStyle para evitar corte em telas com notch */
+// Ajuste o paddingHorizontal dinamicamente para tablets se necessário

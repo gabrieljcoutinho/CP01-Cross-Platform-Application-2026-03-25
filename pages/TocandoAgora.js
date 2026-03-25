@@ -1,21 +1,45 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, View, TouchableOpacity } from 'react-native';
+import { FlatList, View, TouchableOpacity, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as S from '../Css/stylesTocandoAgora';
+
+// Controle local para evitar múltiplos likes na mesma sessão
+const sessionLikes = new Set();
 
 export default function PlaylistScreen({ floor, onBack, onAddMusic }) {
   const [songs, setSongs] = useState([]);
 
-  const loadPlaylist = () => {
-    fetch(`http://192.168.68.117:5000/playlist/${floor}`)
-      .then(res => res.json())
-      .then(data => setSongs(data))
-      .catch(err => console.error("Erro ao buscar playlist:", err));
+  const loadPlaylist = async () => {
+    try {
+      const response = await fetch(`http://192.168.68.117:5000/playlist/${floor}`);
+      const data = await response.json();
+      setSongs(data);
+    } catch (err) {
+      console.error("Erro ao carregar playlist:", err);
+    }
   };
 
   useEffect(() => {
     loadPlaylist();
   }, [floor]);
+
+  const handleLike = async (playlistId) => {
+    if (sessionLikes.has(playlistId)) return;
+
+    try {
+      // Método PUT usando o playlist_id único do objeto na playlist
+      const response = await fetch(`http://192.168.68.117:5000/playlist/${playlistId}`, {
+        method: 'PUT',
+      });
+
+      if (response.ok) {
+        sessionLikes.add(playlistId);
+        loadPlaylist(); // Recarrega para atualizar os contadores
+      }
+    } catch (err) {
+      console.error("Erro ao processar like:", err);
+    }
+  };
 
   return (
     <S.Container>
@@ -27,14 +51,28 @@ export default function PlaylistScreen({ floor, onBack, onAddMusic }) {
 
       <FlatList
         data={songs}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(item) => item.playlist_id}
+        showsVerticalScrollIndicator={false}
         renderItem={({ item }) => (
           <S.Card>
             <S.Row>
-              <View>
+              <View style={{ flex: 1 }}>
                 <S.SongTitle>{item.title}</S.SongTitle>
                 <S.Artist>{item.artist}</S.Artist>
                 <S.Genre>{item.genre}</S.Genre>
+              </View>
+
+              <View style={{ alignItems: 'center', minWidth: 40 }}>
+                <TouchableOpacity onPress={() => handleLike(item.playlist_id)}>
+                  <Ionicons
+                    name="heart"
+                    size={26}
+                    color={sessionLikes.has(item.playlist_id) ? "#ed145b" : "#333"}
+                  />
+                </TouchableOpacity>
+                <Text style={{ color: '#fff', fontSize: 12, marginTop: 2 }}>
+                  {item.likes || 0}
+                </Text>
               </View>
             </S.Row>
           </S.Card>
@@ -43,15 +81,19 @@ export default function PlaylistScreen({ floor, onBack, onAddMusic }) {
 
       <TouchableOpacity
         style={{
-          width: 55,
-          height: 55,
-          borderRadius: 27.5,
+          width: 60,
+          height: 60,
+          borderRadius: 30,
           backgroundColor: "#ed145b",
           alignItems: "center",
           justifyContent: "center",
           alignSelf: "center",
-          marginBottom: 30,
-          elevation: 5
+          marginBottom: 35,
+          elevation: 10,
+          shadowColor: "#ed145b",
+          shadowOpacity: 0.5,
+          shadowRadius: 10,
+          shadowOffset: { width: 0, height: 5 }
         }}
         onPress={onAddMusic}
       >
@@ -62,4 +104,4 @@ export default function PlaylistScreen({ floor, onBack, onAddMusic }) {
 }
 
 // Css da responsividade desse componente
-/* Garanta que o botão de adicionar tenha um z-index alto e margem inferior segura para diferentes modelos de iPhone/Android */
+// Garanta que o FlatList tenha contentContainerStyle={{ paddingBottom: 100 }} para não cobrir o último item
