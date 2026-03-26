@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, FlatList, SafeAreaView, StatusBar, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import musicDatabase from '../music/music.json';
+import { API_URL } from "../services/api";
 
 export default function MusicListScreen({ genre, floor, onMusicAdded, onBack }) {
   const genreKey = genre.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -10,7 +11,7 @@ export default function MusicListScreen({ genre, floor, onMusicAdded, onBack }) 
   const handleAddMusic = async (songId) => {
     try {
       // POST para criar a música na playlist do andar
-      const response = await fetch(`http://192.168.68.117:5000/playlist/${floor}/${songId}`, {
+      const response = await fetch(`${API_URL}/playlist/${floor}/${songId}`, {
         method: 'POST',
       });
 
