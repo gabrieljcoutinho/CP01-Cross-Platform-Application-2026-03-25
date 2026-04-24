@@ -3,7 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 
 import LoadingScreen from './components/LoadingScreen';
 import LoginScreen from './pages/LoginScreen';
-import RegistrationScreen from './pages/CadastroScreen';
+import RegistrationScreen from './pages/RegistrationScreen';
 import RoomSelectionScreen from './pages/SelecionandoAsala';
 import VibeSelectionScreen from './pages/VibeSelectionScreen';
 import MusicListScreen from './pages/MusicListScreen';

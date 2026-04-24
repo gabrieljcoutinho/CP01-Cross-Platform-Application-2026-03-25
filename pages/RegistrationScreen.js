@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Platform, Alert } from 'react-native';
 import * as S from '../Css/styleCadastro';
 
-export default function CadastroScreen({ onRegister, onBack }) {
+export default function RegistrationScreen({ onRegister, onBack }) {
   const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
 

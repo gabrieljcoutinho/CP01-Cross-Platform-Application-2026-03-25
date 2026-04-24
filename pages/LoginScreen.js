@@ -1,35 +1,50 @@
 import React, { useState } from 'react';
 import { Platform, Alert } from 'react-native';
+import * as FileSystem from 'expo-file-system/legacy';
 import * as S from '../Css/styleLogin';
 
-export default function LoginScreen({ onLogin, onGoToRegister, registeredUser }) {
+const ARQUIVO = FileSystem.documentDirectory + 'usuarios.json';
+
+export default function LoginScreen({ onLogin, onGoToRegister }) {
   const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleEnter = () => {
+  const handleEnter = async () => {
     if (user.trim() === '' || password.trim() === '') {
       Alert.alert("Acesso Negado", "Preencha todos os campos do sistema.");
       return;
     }
 
-    if (!registeredUser) {
-      Alert.alert(
-        "Usuário não encontrado",
-        "Nenhum registro detectado. Por favor, crie uma conta primeiro."
-      );
-      return;
-    }
+    try {
+      const fileInfo = await FileSystem.getInfoAsync(ARQUIVO);
 
-    if (user === registeredUser.user && password === registeredUser.password) {
-      console.log("LOGIN OK");
-      onLogin();
-    } else {
-      Alert.alert("Erro de Autenticação", "Usuário_ID ou Password_Key incorretos.");
+      if (!fileInfo.exists) {
+        Alert.alert("Usuário não encontrado", "Nenhum registro detectado. Por favor, crie uma conta primeiro.");
+        return;
+      }
+
+      const conteudo = await FileSystem.readAsStringAsync(ARQUIVO);
+      const usuarios = JSON.parse(conteudo);
+
+      const encontrado = usuarios.find(
+        u => u.email === user.trim() && u.senha === password.trim()
+      );
+
+      if (encontrado) {
+        console.log("LOGIN OK");
+        onLogin();
+      } else {
+        Alert.alert("Erro de Autenticação", "Usuário_ID ou Password_Key incorretos.");
+      }
+
+    } catch (error) {
+      Alert.alert("Erro", "Não foi possível verificar o login.");
+      console.error(error);
     }
   };
 
   const handleGoToRegister = () => {
-    console.log("CLICOU CADASTRAR"); // 🔥 DEBUG
+    console.log("CLICOU CADASTRAR");
     onGoToRegister();
   };
 
@@ -72,7 +87,6 @@ export default function LoginScreen({ onLogin, onGoToRegister, registeredUser })
           <S.ButtonText>Acessar Sistema</S.ButtonText>
         </S.LoginButton>
 
-        {/* 🔥 BOTÃO DE CADASTRO CORRIGIDO */}
         <S.FooterLink onPress={handleGoToRegister}>
           <S.FooterText>
             Não possui acesso?{" "}
