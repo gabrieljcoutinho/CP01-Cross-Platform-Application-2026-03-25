@@ -1,24 +1,51 @@
 import React, { useState } from 'react';
 import { Platform, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as S from '../Css/styleCadastro';
 
-export default function CadastroScreen({ onRegister, onBack }) {
+export default function CadastroScreen({ onBack }) {
   const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     if (user.trim() === '' || password.trim() === '') {
       Alert.alert("Erro", "Por favor, preencha todos os campos.");
       return;
     }
 
-    // 🔥 CHAMA REGISTRO
-    onRegister(user, password);
+    try {
+      // 🔥 pega usuários existentes
+      const storedUsers = await AsyncStorage.getItem('users');
+      const usuarios = storedUsers ? JSON.parse(storedUsers) : [];
 
-    // 🔥 ALERT DEPOIS (evita travar render)
-    setTimeout(() => {
-      Alert.alert("Sucesso", "Conta criada com sucesso! Faça login.");
-    }, 100);
+      // 🔥 verifica se usuário já existe
+      const existe = usuarios.find(u => u.user === user.trim());
+
+      if (existe) {
+        Alert.alert("Erro", "Usuário já existe.");
+        return;
+      }
+
+      // 🔥 cria novo usuário
+      const novoUsuario = {
+        user: user.trim(),
+        password: password.trim()
+      };
+
+      const novosUsuarios = [...usuarios, novoUsuario];
+
+      // 🔥 salva
+      await AsyncStorage.setItem('users', JSON.stringify(novosUsuarios));
+
+      Alert.alert("Sucesso", "Conta criada! Faça login.");
+
+      // 🔥 volta pro login
+      onBack();
+
+    } catch (error) {
+      console.error(error);
+      Alert.alert("Erro", "Falha ao salvar cadastro.");
+    }
   };
 
   return (

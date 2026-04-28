@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { Platform, Alert } from 'react-native';
-import * as FileSystem from 'expo-file-system/legacy';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as S from '../Css/styleLogin';
-
-const ARQUIVO = FileSystem.documentDirectory + 'usuarios.json';
 
 export default function LoginScreen({ onLogin, onGoToRegister }) {
   const [user, setUser] = useState('');
@@ -11,41 +9,31 @@ export default function LoginScreen({ onLogin, onGoToRegister }) {
 
   const handleEnter = async () => {
     if (user.trim() === '' || password.trim() === '') {
-      Alert.alert("Acesso Negado", "Preencha todos os campos do sistema.");
+      Alert.alert("Acesso Negado", "Preencha todos os campos.");
       return;
     }
 
     try {
-      const fileInfo = await FileSystem.getInfoAsync(ARQUIVO);
+      // 🔥 pega usuários salvos
+      const storedUsers = await AsyncStorage.getItem('users');
+      const usuarios = storedUsers ? JSON.parse(storedUsers) : [];
 
-      if (!fileInfo.exists) {
-        Alert.alert("Usuário não encontrado", "Nenhum registro detectado. Por favor, crie uma conta primeiro.");
-        return;
-      }
-
-      const conteudo = await FileSystem.readAsStringAsync(ARQUIVO);
-      const usuarios = JSON.parse(conteudo);
-
+      // 🔥 procura usuário
       const encontrado = usuarios.find(
-        u => u.email === user.trim() && u.senha === password.trim()
+        u => u.user === user.trim() && u.password === password.trim()
       );
 
       if (encontrado) {
-        console.log("LOGIN OK");
+        Alert.alert("Sucesso", "Login realizado!");
         onLogin();
       } else {
-        Alert.alert("Erro de Autenticação", "Usuário_ID ou Password_Key incorretos.");
+        Alert.alert("Erro", "Usuário ou senha incorretos.");
       }
 
     } catch (error) {
-      Alert.alert("Erro", "Não foi possível verificar o login.");
       console.error(error);
+      Alert.alert("Erro", "Falha ao verificar login.");
     }
-  };
-
-  const handleGoToRegister = () => {
-    console.log("CLICOU CADASTRAR");
-    onGoToRegister();
   };
 
   return (
@@ -87,7 +75,7 @@ export default function LoginScreen({ onLogin, onGoToRegister }) {
           <S.ButtonText>Acessar Sistema</S.ButtonText>
         </S.LoginButton>
 
-        <S.FooterLink onPress={handleGoToRegister}>
+        <S.FooterLink onPress={onGoToRegister}>
           <S.FooterText>
             Não possui acesso?{" "}
             <S.FooterText style={{ color: '#ed145b', fontWeight: 'bold' }}>
