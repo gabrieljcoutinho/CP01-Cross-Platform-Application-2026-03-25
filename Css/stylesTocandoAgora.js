@@ -101,6 +101,15 @@ export const BackButton = styled.TouchableOpacity`
   border: 1px solid rgba(255, 255, 255, 0.1);
 `;
 
+export const SearchInput = styled.TextInput`
+  background-color: #121212;
+  color: #ffffff;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 15px;
+`;
+
 /* Css da responsividade desse componente */
 export const ScrollWrapper = styled.ScrollView.attrs({
   showsVerticalScrollIndicator: false,

@@ -14,18 +14,14 @@ const buildUri = (base, path) => {
   return `${cleanBase}${cleanPath}`;
 };
 
-// ── Player unificado: web usa HTMLAudioElement, nativo usa expo-av ─────────────
+// ── Player unificado ───────────────────────────────────────────────────────────
 const createPlayer = async (uri, onFinish) => {
   if (Platform.OS === 'web') {
     const audio = new window.Audio();
 
-    // Aguarda o áudio estar pronto antes de tentar reproduzir
     await new Promise((resolve, reject) => {
       audio.oncanplaythrough = resolve;
-      audio.onerror = () => {
-        const msg = audio.error?.message || 'Formato não suportado ou URL inválida';
-        reject(new Error(`Falha ao carregar áudio: ${msg}`));
-      };
+      audio.onerror = () => reject(new Error('Erro ao carregar áudio'));
       audio.src = uri;
       audio.load();
     });
@@ -34,38 +30,47 @@ const createPlayer = async (uri, onFinish) => {
     await audio.play();
 
     return {
-      pauseAsync:  () => audio.pause(),
-      playAsync:   () => audio.play(),
-      stopAsync:   () => { audio.pause(); audio.currentTime = 0; },
+      pauseAsync: () => audio.pause(),
+      playAsync: () => audio.play(),
+      stopAsync: () => { audio.pause(); audio.currentTime = 0; },
       unloadAsync: () => { audio.pause(); audio.src = ''; },
     };
   }
 
-  // Nativo: expo-av
   const { Audio } = await import('expo-av');
   await Audio.setAudioModeAsync({
     allowsRecordingIOS: false,
     staysActiveInBackground: true,
     playsInSilentModeIOS: true,
   });
+
   const { sound } = await Audio.Sound.createAsync({ uri }, { shouldPlay: true });
+
   sound.setOnPlaybackStatusUpdate((status) => {
     if (status.didJustFinish) onFinish();
   });
+
   return {
-    pauseAsync:  () => sound.pauseAsync(),
-    playAsync:   () => sound.playAsync(),
-    stopAsync:   () => sound.stopAsync(),
+    pauseAsync: () => sound.pauseAsync(),
+    playAsync: () => sound.playAsync(),
+    stopAsync: () => sound.stopAsync(),
     unloadAsync: () => sound.unloadAsync(),
   };
 };
 
 export default function PlaylistScreen({ floor, onBack, onAddMusic }) {
-  const [songs, setSongs]         = useState([]);
+  const [songs, setSongs] = useState([]);
+  const [search, setSearch] = useState('');
   const [playingId, setPlayingId] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [error, setError]         = useState(null);
-  const playerRef                 = useRef(null);
+  const [error, setError] = useState(null);
+  const playerRef = useRef(null);
+
+  // ── Filtrar músicas ─────────────────────────────────────────────────────────
+  const filteredSongs = songs.filter((item) => {
+    const text = `${item.title} ${item.artist} ${item.genre}`.toLowerCase();
+    return text.includes(search.toLowerCase());
+  });
 
   // ── Carrega playlist ────────────────────────────────────────────────────────
   const loadPlaylist = async () => {
@@ -89,7 +94,6 @@ export default function PlaylistScreen({ floor, onBack, onAddMusic }) {
   const handlePlay = async (item) => {
     setError(null);
 
-    // Mesma música → toggle play/pause
     if (playingId === item.playlist_id && playerRef.current) {
       if (isPlaying) {
         await playerRef.current.pauseAsync();
@@ -101,7 +105,6 @@ export default function PlaylistScreen({ floor, onBack, onAddMusic }) {
       return;
     }
 
-    // Outra música → para a atual
     if (playerRef.current) {
       await playerRef.current.stopAsync();
       await playerRef.current.unloadAsync();
@@ -109,7 +112,6 @@ export default function PlaylistScreen({ floor, onBack, onAddMusic }) {
     }
 
     const uri = buildUri(API_URL, item.path);
-    console.log("Reproduzindo URI:", uri); // útil para debug — remova em produção
 
     try {
       const player = await createPlayer(uri, () => {
@@ -121,7 +123,7 @@ export default function PlaylistScreen({ floor, onBack, onAddMusic }) {
       setIsPlaying(true);
     } catch (err) {
       console.error("Erro ao reproduzir:", err);
-      setError(`Não foi possível reproduzir "${item.title}". Verifique o formato do arquivo ou a conexão.`);
+      setError(`Não foi possível reproduzir "${item.title}".`);
       setPlayingId(null);
       setIsPlaying(false);
     }
@@ -130,8 +132,12 @@ export default function PlaylistScreen({ floor, onBack, onAddMusic }) {
   // ── Like ────────────────────────────────────────────────────────────────────
   const handleLike = async (playlistId) => {
     if (sessionLikes.has(playlistId)) return;
+
     try {
-      const response = await fetch(`${API_URL}/playlist/${playlistId}`, { method: 'PUT' });
+      const response = await fetch(`${API_URL}/playlist/${playlistId}`, {
+        method: 'PUT'
+      });
+
       if (response.ok) {
         sessionLikes.add(playlistId);
         loadPlaylist();
@@ -141,7 +147,6 @@ export default function PlaylistScreen({ floor, onBack, onAddMusic }) {
     }
   };
 
-  // ── Render ──────────────────────────────────────────────────────────────────
   return (
     <S.Container>
       <S.BackButton onPress={onBack}>
@@ -150,7 +155,14 @@ export default function PlaylistScreen({ floor, onBack, onAddMusic }) {
 
       <S.Title>🎧 {floor}º andar</S.Title>
 
-      {/* Mensagem de erro de reprodução */}
+      {/* 🔍 INPUT DE BUSCA */}
+      <S.SearchInput
+        placeholder="Buscar música, artista ou gênero..."
+        placeholderTextColor="#888"
+        value={search}
+        onChangeText={setSearch}
+      />
+
       {error && (
         <View style={{
           backgroundColor: '#3a0010',
@@ -164,16 +176,17 @@ export default function PlaylistScreen({ floor, onBack, onAddMusic }) {
       )}
 
       <FlatList
-        data={songs}
+        data={filteredSongs}
         keyExtractor={(item) => String(item.playlist_id)}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 100 }}
         renderItem={({ item }) => {
           const isCurrentTrack = playingId === item.playlist_id;
+
           return (
             <S.Card>
               <S.Row>
-                <TouchableOpacity onPress={() => handlePlay(item)} style={{ marginRight: 12 }}>
+                <TouchableOpacity onPress={() => handlePlay(item)}>
                   <Ionicons
                     name={isCurrentTrack && isPlaying ? "pause-circle" : "play-circle"}
                     size={36}
@@ -181,7 +194,7 @@ export default function PlaylistScreen({ floor, onBack, onAddMusic }) {
                   />
                 </TouchableOpacity>
 
-                <View style={{ flex: 1 }}>
+                <View style={{ flex: 1, marginLeft: 12 }}>
                   <S.SongTitle style={{ color: isCurrentTrack ? '#ed145b' : '#fff' }}>
                     {item.title}
                   </S.SongTitle>
@@ -189,7 +202,7 @@ export default function PlaylistScreen({ floor, onBack, onAddMusic }) {
                   <S.Genre>{item.genre}</S.Genre>
                 </View>
 
-                <View style={{ alignItems: 'center', minWidth: 40 }}>
+                <View style={{ alignItems: 'center' }}>
                   <TouchableOpacity onPress={() => handleLike(item.playlist_id)}>
                     <Ionicons
                       name="heart"
@@ -197,7 +210,8 @@ export default function PlaylistScreen({ floor, onBack, onAddMusic }) {
                       color={sessionLikes.has(item.playlist_id) ? "#ed145b" : "#333"}
                     />
                   </TouchableOpacity>
-                  <Text style={{ color: '#fff', fontSize: 12, marginTop: 2 }}>
+
+                  <Text style={{ color: '#fff', fontSize: 12 }}>
                     {item.likes || 0}
                   </Text>
                 </View>
@@ -209,13 +223,15 @@ export default function PlaylistScreen({ floor, onBack, onAddMusic }) {
 
       <TouchableOpacity
         style={{
-          width: 60, height: 60, borderRadius: 30,
+          width: 60,
+          height: 60,
+          borderRadius: 30,
           backgroundColor: "#ed145b",
-          alignItems: "center", justifyContent: "center",
-          alignSelf: "center", marginBottom: 35,
-          elevation: 10, shadowColor: "#ed145b",
-          shadowOpacity: 0.5, shadowRadius: 10,
-          shadowOffset: { width: 0, height: 5 },
+          alignItems: "center",
+          justifyContent: "center",
+          alignSelf: "center",
+          marginBottom: 35,
+          elevation: 10,
         }}
         onPress={onAddMusic}
       >
