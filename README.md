@@ -85,7 +85,7 @@
 </ol>
 
 ## Vídeo Funcional do App
-https://github.com/user-attachments/assets/d8809a4b-93c4-481f-bdf9-03edd90ab631
+https://github.com/user-attachments/assets/458d92d3-555e-458b-9900-d73052d25e54
 
 ## Decisões Técnicas
 ### Estrutura do projeto
