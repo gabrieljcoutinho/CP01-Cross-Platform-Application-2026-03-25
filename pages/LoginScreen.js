@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Platform, Alert } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { API_URL } from "../services/api";
 import * as S from '../Css/styleLogin';
 
 export default function LoginScreen({ onLogin, onGoToRegister }) {
-  const [user, setUser] = useState('');
+  const [user, setUser]         = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading]   = useState(false);
 
   const handleEnter = async () => {
     if (user.trim() === '' || password.trim() === '') {
@@ -13,26 +14,30 @@ export default function LoginScreen({ onLogin, onGoToRegister }) {
       return;
     }
 
+    setLoading(true);
     try {
-      // 🔥 pega usuários salvos
-      const storedUsers = await AsyncStorage.getItem('users');
-      const usuarios = storedUsers ? JSON.parse(storedUsers) : [];
+      const response = await fetch(`${API_URL}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: user.trim(),
+          password: password.trim(),
+        }),
+      });
 
-      // 🔥 procura usuário
-      const encontrado = usuarios.find(
-        u => u.user === user.trim() && u.password === password.trim()
-      );
+      const data = await response.json();
 
-      if (encontrado) {
+      if (response.ok) {
         Alert.alert("Sucesso", "Login realizado!");
         onLogin();
       } else {
-        Alert.alert("Erro", "Usuário ou senha incorretos.");
+        Alert.alert("Erro", data.error || "Usuário ou senha incorretos.");
       }
-
     } catch (error) {
       console.error(error);
-      Alert.alert("Erro", "Falha ao verificar login.");
+      Alert.alert("Erro", "Falha na conexão com o servidor.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -45,7 +50,6 @@ export default function LoginScreen({ onLogin, onGoToRegister }) {
       />
 
       <S.ContentWrapper behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-
         <S.HeaderSection>
           <S.LoginSubtitle>System Access</S.LoginSubtitle>
           <S.LoginTitle>LOGIN</S.LoginTitle>
@@ -58,6 +62,7 @@ export default function LoginScreen({ onLogin, onGoToRegister }) {
             value={user}
             onChangeText={setUser}
             autoCapitalize="none"
+            editable={!loading}
           />
         </S.InputContainer>
 
@@ -68,11 +73,12 @@ export default function LoginScreen({ onLogin, onGoToRegister }) {
             secureTextEntry
             value={password}
             onChangeText={setPassword}
+            editable={!loading}
           />
         </S.InputContainer>
 
-        <S.LoginButton activeOpacity={0.8} onPress={handleEnter}>
-          <S.ButtonText>Acessar Sistema</S.ButtonText>
+        <S.LoginButton activeOpacity={0.8} onPress={handleEnter} disabled={loading}>
+          <S.ButtonText>{loading ? 'Entrando...' : 'Acessar Sistema'}</S.ButtonText>
         </S.LoginButton>
 
         <S.FooterLink onPress={onGoToRegister}>
@@ -83,7 +89,6 @@ export default function LoginScreen({ onLogin, onGoToRegister }) {
             </S.FooterText>
           </S.FooterText>
         </S.FooterLink>
-
       </S.ContentWrapper>
     </S.Container>
   );

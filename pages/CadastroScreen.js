@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Platform, Alert } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { API_URL } from "../services/api";
 import * as S from '../Css/styleCadastro';
 
 export default function CadastroScreen({ onBack }) {
-  const [user, setUser] = useState('');
+  const [user, setUser]         = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading]   = useState(false);
 
   const handleRegister = async () => {
     if (user.trim() === '' || password.trim() === '') {
@@ -13,38 +14,30 @@ export default function CadastroScreen({ onBack }) {
       return;
     }
 
+    setLoading(true);
     try {
-      // 🔥 pega usuários existentes
-      const storedUsers = await AsyncStorage.getItem('users');
-      const usuarios = storedUsers ? JSON.parse(storedUsers) : [];
+      const response = await fetch(`${API_URL}/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: user.trim(),
+          password: password.trim(),
+        }),
+      });
 
-      // 🔥 verifica se usuário já existe
-      const existe = usuarios.find(u => u.user === user.trim());
+      const data = await response.json();
 
-      if (existe) {
-        Alert.alert("Erro", "Usuário já existe.");
-        return;
+      if (response.ok) {
+        Alert.alert("Sucesso", "Conta criada! Faça login.");
+        onBack();
+      } else {
+        Alert.alert("Erro", data.error || "Não foi possível criar a conta.");
       }
-
-      // 🔥 cria novo usuário
-      const novoUsuario = {
-        user: user.trim(),
-        password: password.trim()
-      };
-
-      const novosUsuarios = [...usuarios, novoUsuario];
-
-      // 🔥 salva
-      await AsyncStorage.setItem('users', JSON.stringify(novosUsuarios));
-
-      Alert.alert("Sucesso", "Conta criada! Faça login.");
-
-      // 🔥 volta pro login
-      onBack();
-
     } catch (error) {
       console.error(error);
-      Alert.alert("Erro", "Falha ao salvar cadastro.");
+      Alert.alert("Erro", "Falha na conexão com o servidor.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -69,6 +62,7 @@ export default function CadastroScreen({ onBack }) {
             value={user}
             onChangeText={setUser}
             autoCapitalize="none"
+            editable={!loading}
           />
         </S.InputContainer>
 
@@ -79,11 +73,12 @@ export default function CadastroScreen({ onBack }) {
             secureTextEntry
             value={password}
             onChangeText={setPassword}
+            editable={!loading}
           />
         </S.InputContainer>
 
-        <S.ActionButton activeOpacity={0.8} onPress={handleRegister}>
-          <S.ButtonText>Finalizar Cadastro</S.ButtonText>
+        <S.ActionButton activeOpacity={0.8} onPress={handleRegister} disabled={loading}>
+          <S.ButtonText>{loading ? 'Criando conta...' : 'Finalizar Cadastro'}</S.ButtonText>
         </S.ActionButton>
 
         <S.FooterLink onPress={onBack}>
