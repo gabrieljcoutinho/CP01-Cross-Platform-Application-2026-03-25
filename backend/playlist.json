@@ -6,7 +6,7 @@
       "artist": "Maneskin",
       "path": "music/Rock/thefirsttime.mp3",
       "genre": "rock",
-      "likes": 6,
+      "likes": 7,
       "playlist_id": "17d89eee-44e2-4e75-8e45-a6dddc06c25f"
     },
     {
@@ -15,7 +15,7 @@
       "artist": "MC Levinho",
       "path": "music/Funk/dopamina.mp3",
       "genre": "funk",
-      "likes": 5,
+      "likes": 6,
       "playlist_id": "8196c6a7-0cfb-41bf-b218-2566013fd3a5"
     },
     {
@@ -24,7 +24,7 @@
       "artist": "Cartoon",
       "path": "music/Eletronico/oneon.mp3",
       "genre": "eletronico",
-      "likes": 3,
+      "likes": 4,
       "playlist_id": "469800a2-63b7-4710-a8a1-79cae0d9bd59"
     },
     {
@@ -60,7 +60,7 @@
       "artist": "Pear Jean",
       "path": "music/Rock/iammine.mp3",
       "genre": "rock",
-      "likes": 0,
+      "likes": 1,
       "playlist_id": "392d1763-d534-4e9b-9fc2-ff10310708ba"
     },
     {
@@ -89,7 +89,7 @@
       "artist": "Pear Jean",
       "path": "music/Rock/iammine.mp3",
       "genre": "rock",
-      "likes": 1,
+      "likes": 2,
       "playlist_id": "5950e48b-ad6d-4631-b357-376c81f816ad"
     },
     {
@@ -98,7 +98,7 @@
       "artist": "MC Livinho",
       "path": "music/Funk/dopamina.mp3",
       "genre": "funk",
-      "likes": 0,
+      "likes": 1,
       "playlist_id": "2e11860b-64c9-49f1-b65b-faea65bd8598"
     },
     {
@@ -118,6 +118,24 @@
       "genre": "pagode",
       "likes": 1,
       "playlist_id": "d7db0ec9-2bf5-4593-81a1-a8a2b27b5d0f"
+    },
+    {
+      "song_id": 11,
+      "title": "Me Amar Amanhã",
+      "artist": "Artist G",
+      "path": "music/Sertanejo/meamaramanha.mp3",
+      "genre": "sertanejo",
+      "likes": 0,
+      "playlist_id": "f00fd465-f2fd-4849-a93e-83d31b0c3c1f"
+    },
+    {
+      "song_id": 12,
+      "title": "Olho Marrom",
+      "artist": "Artist K",
+      "path": "music/Sertanejo/olhomarrom.mp3",
+      "genre": "sertanejo",
+      "likes": 0,
+      "playlist_id": "f74d524a-78a4-4228-afac-9d92c4788149"
     }
   ],
   "3": [
