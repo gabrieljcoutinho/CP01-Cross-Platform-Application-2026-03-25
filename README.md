@@ -87,6 +87,9 @@
 ## Vídeo Funcional do App
 https://github.com/user-attachments/assets/458d92d3-555e-458b-9900-d73052d25e54
 
+## Vídeo Funcional 2.0 - Música tocando e animações
+https://github.com/user-attachments/assets/6dc70295-6c75-4b3d-a57a-a5ea311d16da
+
 ## Decisões Técnicas
 ### Estrutura do projeto
 <p>
