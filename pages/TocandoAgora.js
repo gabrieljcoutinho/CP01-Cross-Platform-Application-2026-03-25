@@ -1,20 +1,29 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { FlatList, View, TouchableOpacity, Text, Platform } from 'react-native';
+import {
+  FlatList,
+  View,
+  TouchableOpacity,
+  Text,
+  Platform,
+  Animated,
+  Easing
+} from 'react-native';
+
 import { Ionicons } from '@expo/vector-icons';
 import * as S from '../Css/stylesTocandoAgora';
 import { API_URL } from "../services/api";
 
-// Evita múltiplos likes na mesma sessão
+// evita múltiplos likes na sessão
 const sessionLikes = new Set();
 
-// Monta URL corretamente
+// monta URL
 const buildUri = (base, path) => {
   const cleanBase = base.endsWith('/') ? base.slice(0, -1) : base;
   const cleanPath = path.startsWith('/') ? path : `/${path}`;
   return `${cleanBase}${cleanPath}`;
 };
 
-// Player unificado
+// player unificado
 const createPlayer = async (uri, onFinish) => {
   if (Platform.OS === 'web') {
     const audio = new window.Audio();
@@ -72,32 +81,91 @@ export default function PlaylistScreen({ floor, onBack, onAddMusic }) {
 
   const playerRef = useRef(null);
 
-  // Filtro
+  // 🔥 animações por item (CORRETO)
+  const animationsRef = useRef({});
+
+  const getAnimation = (id) => {
+    if (!animationsRef.current[id]) {
+      animationsRef.current[id] = {
+        scale: new Animated.Value(1),
+        bars: [
+          new Animated.Value(5),
+          new Animated.Value(10),
+          new Animated.Value(7),
+        ],
+      };
+    }
+    return animationsRef.current[id];
+  };
+
+  // controla animação SOMENTE do item atual
+  useEffect(() => {
+    if (!playingId) return;
+
+    const anim = getAnimation(playingId);
+
+    if (isPlaying) {
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(anim.scale, {
+            toValue: 1.15,
+            duration: 500,
+            useNativeDriver: true,
+            easing: Easing.linear,
+          }),
+          Animated.timing(anim.scale, {
+            toValue: 1,
+            duration: 500,
+            useNativeDriver: true,
+          }),
+        ])
+      ).start();
+
+      anim.bars.forEach((bar, i) => {
+        Animated.loop(
+          Animated.sequence([
+            Animated.timing(bar, {
+              toValue: 25,
+              duration: 300 + i * 100,
+              useNativeDriver: false,
+            }),
+            Animated.timing(bar, {
+              toValue: 5,
+              duration: 300 + i * 100,
+              useNativeDriver: false,
+            }),
+          ])
+        ).start();
+      });
+    } else {
+      anim.scale.setValue(1);
+      anim.bars.forEach(bar => bar.setValue(5));
+    }
+  }, [isPlaying, playingId]);
+
+  // filtro
   const filteredSongs = songs.filter((item) => {
     const text = `${item.title} ${item.artist} ${item.genre}`.toLowerCase();
     return text.includes(search.toLowerCase());
   });
 
-  // Carrega playlist
+  // playlist
   const loadPlaylist = async () => {
     try {
       const response = await fetch(`${API_URL}/playlist/${floor}`);
       const data = await response.json();
       setSongs(data);
     } catch (err) {
-      console.error("Erro ao carregar playlist:", err);
+      console.error(err);
     }
   };
 
   useEffect(() => {
     loadPlaylist();
-
-    return () => {
-      playerRef.current?.unloadAsync();
-    };
+    return () => playerRef.current?.unloadAsync();
   }, [floor]);
 
-  // Play/Pause
+  // play
   const handlePlay = async (item) => {
     setError(null);
 
@@ -133,7 +201,6 @@ export default function PlaylistScreen({ floor, onBack, onAddMusic }) {
       setCurrentTrack(item);
 
     } catch (err) {
-      console.error("Erro ao reproduzir:", err);
       setError(`Não foi possível reproduzir "${item.title}".`);
       setPlayingId(null);
       setIsPlaying(false);
@@ -142,20 +209,15 @@ export default function PlaylistScreen({ floor, onBack, onAddMusic }) {
   };
 
   const handlePause = async () => {
-    if (playerRef.current) {
-      await playerRef.current.pauseAsync();
-      setIsPlaying(false);
-    }
+    await playerRef.current?.pauseAsync();
+    setIsPlaying(false);
   };
 
   const handleResume = async () => {
-    if (playerRef.current) {
-      await playerRef.current.playAsync();
-      setIsPlaying(true);
-    }
+    await playerRef.current?.playAsync();
+    setIsPlaying(true);
   };
 
-  // Like
   const handleLike = async (playlistId) => {
     if (sessionLikes.has(playlistId)) return;
 
@@ -169,12 +231,13 @@ export default function PlaylistScreen({ floor, onBack, onAddMusic }) {
         loadPlaylist();
       }
     } catch (err) {
-      console.error("Erro ao processar like:", err);
+      console.error(err);
     }
   };
 
   return (
     <S.Container>
+
       <S.BackButton onPress={onBack}>
         <Ionicons name="arrow-back" size={24} color="#fff" />
       </S.BackButton>
@@ -182,51 +245,77 @@ export default function PlaylistScreen({ floor, onBack, onAddMusic }) {
       <S.Title>🎧 {floor}º andar</S.Title>
 
       <S.SearchInput
-        placeholder="Buscar música, artista ou gênero..."
+        placeholder="Buscar música..."
         placeholderTextColor="#888"
         value={search}
         onChangeText={setSearch}
       />
 
       {error && (
-        <View style={{
-          backgroundColor: '#3a0010',
-          borderRadius: 8,
-          padding: 10,
-          marginHorizontal: 16,
-          marginBottom: 8,
-        }}>
-          <Text style={{ color: '#ff6b8a', fontSize: 13 }}>{error}</Text>
+        <View style={{ backgroundColor: '#3a0010', padding: 10, margin: 10, borderRadius: 8 }}>
+          <Text style={{ color: '#ff6b8a' }}>{error}</Text>
         </View>
       )}
 
       <FlatList
         data={filteredSongs}
         keyExtractor={(item) => String(item.playlist_id)}
-        showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 120 }}
         renderItem={({ item }) => {
-          const isCurrentTrack = playingId === item.playlist_id;
+          const isCurrent = playingId === item.playlist_id;
+          const anim = getAnimation(item.playlist_id);
 
           return (
             <S.Card>
               <S.Row>
+
+                {/* play */}
                 <TouchableOpacity onPress={() => handlePlay(item)}>
-                  <Ionicons
-                    name={isCurrentTrack && isPlaying ? "pause-circle" : "play-circle"}
-                    size={36}
-                    color={isCurrentTrack ? "#ed145b" : "#555"}
-                  />
+                  <Animated.View
+                    style={{
+                      transform: [
+                        { scale: isCurrent && isPlaying ? anim.scale : 1 }
+                      ]
+                    }}
+                  >
+                    <Ionicons
+                      name={isCurrent && isPlaying ? "pause-circle" : "play-circle"}
+                      size={36}
+                      color={isCurrent ? "#ed145b" : "#555"}
+                    />
+                  </Animated.View>
                 </TouchableOpacity>
 
+                {/* infos */}
                 <View style={{ flex: 1, marginLeft: 12 }}>
-                  <S.SongTitle style={{ color: isCurrentTrack ? '#ed145b' : '#fff' }}>
+                  <S.SongTitle style={{ color: isCurrent ? '#ed145b' : '#fff' }}>
                     {item.title}
                   </S.SongTitle>
+
                   <S.Artist>{item.artist}</S.Artist>
                   <S.Genre>{item.genre}</S.Genre>
+
+                  {/* equalizer FIXADO (não empurra layout) */}
+                  {isCurrent && isPlaying && (
+                    <View style={{ flexDirection: 'row', marginTop: 6, height: 20, alignItems: 'flex-end' }}>
+                      {anim.bars.map((bar, i) => (
+                        <View key={i} style={{ height: 20, justifyContent: 'flex-end' }}>
+                          <Animated.View
+                            style={{
+                              width: 3,
+                              height: bar,
+                              backgroundColor: '#ed145b',
+                              marginRight: 3,
+                              borderRadius: 2,
+                            }}
+                          />
+                        </View>
+                      ))}
+                    </View>
+                  )}
                 </View>
 
+                {/* like */}
                 <View style={{ alignItems: 'center' }}>
                   <TouchableOpacity onPress={() => handleLike(item.playlist_id)}>
                     <Ionicons
@@ -240,13 +329,14 @@ export default function PlaylistScreen({ floor, onBack, onAddMusic }) {
                     {item.likes || 0}
                   </Text>
                 </View>
+
               </S.Row>
             </S.Card>
           );
         }}
       />
 
-      {/* MINI PLAYER */}
+      {/* mini player */}
       {currentTrack && (
         <View style={{
           position: 'absolute',
@@ -255,36 +345,25 @@ export default function PlaylistScreen({ floor, onBack, onAddMusic }) {
           right: 0,
           height: 70,
           backgroundColor: '#121212',
-          borderTopWidth: 1,
-          borderTopColor: 'rgba(255,255,255,0.1)',
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'space-between',
           paddingHorizontal: 15,
         }}>
           <View style={{ flex: 1 }}>
-            <Text style={{ color: '#fff', fontWeight: 'bold' }}>
-              {currentTrack.title}
-            </Text>
-            <Text style={{ color: '#aaa', fontSize: 12 }}>
-              {currentTrack.artist}
-            </Text>
+            <Text style={{ color: '#fff' }}>{currentTrack.title}</Text>
+            <Text style={{ color: '#aaa', fontSize: 12 }}>{currentTrack.artist}</Text>
           </View>
 
-          <TouchableOpacity
-            onPress={isPlaying ? handlePause : handleResume}
-          >
-            <Ionicons
-              name={isPlaying ? 'pause' : 'play'}
-              size={28}
-              color="#ed145b"
-            />
+          <TouchableOpacity onPress={isPlaying ? handlePause : handleResume}>
+            <Ionicons name={isPlaying ? "pause" : "play"} size={28} color="#ed145b" />
           </TouchableOpacity>
         </View>
       )}
 
-      {/* BOTÃO ADD */}
+      {/* add music */}
       <TouchableOpacity
+        onPress={onAddMusic}
         style={{
           width: 60,
           height: 60,
@@ -294,9 +373,7 @@ export default function PlaylistScreen({ floor, onBack, onAddMusic }) {
           justifyContent: "center",
           alignSelf: "center",
           marginBottom: 100,
-          elevation: 10,
         }}
-        onPress={onAddMusic}
       >
         <Ionicons name="add" size={35} color="#fff" />
       </TouchableOpacity>
