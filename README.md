@@ -45,11 +45,11 @@
 
 ## Demonstração
 <div style="display: flex; justify-content: in-line;">
-  <img width="360" height="480" alt="Image" src="https://github.com/user-attachments/assets/8f7c011a-ecde-4d13-9df0-92468e97696b" />
-  <img width="360" height="480" alt="Image" src="https://github.com/user-attachments/assets/cbf7135f-e5ba-4cbc-a9b0-87bf6e228a6b" />
-  <img width="360" height="480" alt="Image" src="https://github.com/user-attachments/assets/d8af3e89-fd11-4008-b792-d3b608a72bdd" />
-  <img width="360" height="480" alt="Image" src="https://github.com/user-attachments/assets/aa485918-57ed-4772-91ee-bfcf643d3a5d" />
-  <img width="360" height="480" alt="Image" src="https://github.com/user-attachments/assets/b0de4823-d8c2-4552-9389-a3745bc0b0cf" />
+  <img width="360" height="580" alt="Image" src="https://github.com/user-attachments/assets/8f7c011a-ecde-4d13-9df0-92468e97696b" />
+  <img width="360" height="580" alt="Image" src="https://github.com/user-attachments/assets/cbf7135f-e5ba-4cbc-a9b0-87bf6e228a6b" />
+  <img width="360" height="580" alt="Image" src="https://github.com/user-attachments/assets/d8af3e89-fd11-4008-b792-d3b608a72bdd" />
+  <img width="360" height="580" alt="Image" src="https://github.com/user-attachments/assets/aa485918-57ed-4772-91ee-bfcf643d3a5d" />
+  <img width="360" height="580" alt="Image" src="https://github.com/user-attachments/assets/b0de4823-d8c2-4552-9389-a3745bc0b0cf" />
 </div>
 
 ## O que você precisa antes de "rodar" nosso projeto
