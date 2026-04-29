@@ -48,7 +48,7 @@
     {
       "song_id": 10,
       "title": "I Am Mine",
-      "artist": "Artist J",
+      "artist": "Pear Jean",
       "path": "music/Rock/iammine.mp3",
       "genre": "rock",
       "likes": 0,
@@ -75,7 +75,7 @@
     {
       "song_id": 12,
       "title": "Olho Marrom",
-      "artist": "Artist K",
+      "artist": "Luan Santana",
       "path": "music/Sertanejo/olhomarrom.mp3",
       "genre": "sertanejo",
       "likes": 2,
@@ -84,7 +84,7 @@
     {
       "song_id": 10,
       "title": "I Am Mine",
-      "artist": "Artist J",
+      "artist": "Pear Jean",
       "path": "music/Rock/iammine.mp3",
       "genre": "rock",
       "likes": 0,
@@ -131,7 +131,7 @@
     {
       "song_id": 11,
       "title": "Me Amar Amanhã",
-      "artist": "Artist G",
+      "artist": "Matheus e Kauan",
       "path": "music/Sertanejo/meamaramanha.mp3",
       "genre": "sertanejo",
       "likes": 0,
@@ -140,7 +140,7 @@
     {
       "song_id": 12,
       "title": "Olho Marrom",
-      "artist": "Artist K",
+      "artist": "Luan Santana",
       "path": "music/Sertanejo/olhomarrom.mp3",
       "genre": "sertanejo",
       "likes": 0,
@@ -169,7 +169,7 @@
     {
       "song_id": 12,
       "title": "Olho Marrom",
-      "artist": "Artist K",
+      "artist": "Luan Santana",
       "path": "music/Sertanejo/olhomarrom.",
       "genre": "sertanejo",
       "likes": 2,
@@ -198,7 +198,7 @@
     {
       "song_id": 12,
       "title": "Olho Marrom",
-      "artist": "Artist K",
+      "artist": "Luan Santana",
       "path": "music/Sertanejo/olhomarrom.",
       "genre": "sertanejo",
       "likes": 2,
@@ -294,7 +294,7 @@
     {
       "song_id": 11,
       "title": "Me Amar Amanhã",
-      "artist": "Artist G",
+      "artist": "Matheus e Kauan",
       "path": "music/Sertanejo/meamaramanha.mp3",
       "genre": "sertanejo",
       "likes": 1,
