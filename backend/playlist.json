@@ -163,7 +163,7 @@
       "artist": "Artist K",
       "path": "music/Sertanejo/olhomarrom.",
       "genre": "sertanejo",
-      "likes": 1,
+      "likes": 2,
       "playlist_id": "c42899fa-ab4b-4d82-9f1f-f2cf9693195a"
     },
     {
@@ -172,7 +172,7 @@
       "artist": "Artist H",
       "path": "music/Pagode/tavendoaquelalua.mp3",
       "genre": "pagode",
-      "likes": 0,
+      "likes": 1,
       "playlist_id": "8aec3a13-7670-412f-ad8e-f6b83ca18e82"
     },
     {
@@ -192,7 +192,7 @@
       "artist": "Artist K",
       "path": "music/Sertanejo/olhomarrom.",
       "genre": "sertanejo",
-      "likes": 1,
+      "likes": 2,
       "playlist_id": "6f74344b-13c7-4446-af94-728d6057c490"
     },
     {
@@ -201,7 +201,7 @@
       "artist": "Artist F",
       "path": "music/Rock/thefirsttime.mp3",
       "genre": "rock",
-      "likes": 0,
+      "likes": 1,
       "playlist_id": "38006c2a-df71-4596-aff5-d5e55511b05e"
     }
   ],
@@ -277,7 +277,7 @@
       "artist": "Artist F",
       "path": "music/Rock/thefirsttime.mp3",
       "genre": "rock",
-      "likes": 1,
+      "likes": 2,
       "playlist_id": "d5cafdbf-e538-4b29-952a-8f4884c9c3e2"
     }
   ],
