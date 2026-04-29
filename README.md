@@ -21,7 +21,7 @@
 ### Tecnologias Utilizadas
 <p>
   <a href="https://skillicons.dev">
-    <img src="https://skillicons.dev/icons?i=git,python,react,javascript,css,html" />
+    <img src="https://skillicons.dev/icons?i=git,python,react,javascript" />
   </a>
 </p>
 
@@ -45,11 +45,11 @@
 
 ## Demonstração
 <div style="display: flex; justify-content: in-line;">
-  <img width="260" height="680" alt="Image" src="https://github.com/user-attachments/assets/8f7c011a-ecde-4d13-9df0-92468e97696b" />
-  <img width="260" height="531" alt="Image" src="https://github.com/user-attachments/assets/cbf7135f-e5ba-4cbc-a9b0-87bf6e228a6b" />
-  <img width="260" height="531" alt="Image" src="https://github.com/user-attachments/assets/d8af3e89-fd11-4008-b792-d3b608a72bdd" />
-  <img width="263" height="642" alt="Image" src="https://github.com/user-attachments/assets/aa485918-57ed-4772-91ee-bfcf643d3a5d" />
-  <img width="260" height="531" alt="Image" src="https://github.com/user-attachments/assets/b0de4823-d8c2-4552-9389-a3745bc0b0cf" />
+  <img width="360" height="480" alt="Image" src="https://github.com/user-attachments/assets/8f7c011a-ecde-4d13-9df0-92468e97696b" />
+  <img width="360" height="480" alt="Image" src="https://github.com/user-attachments/assets/cbf7135f-e5ba-4cbc-a9b0-87bf6e228a6b" />
+  <img width="360" height="480" alt="Image" src="https://github.com/user-attachments/assets/d8af3e89-fd11-4008-b792-d3b608a72bdd" />
+  <img width="360" height="480" alt="Image" src="https://github.com/user-attachments/assets/aa485918-57ed-4772-91ee-bfcf643d3a5d" />
+  <img width="360" height="480" alt="Image" src="https://github.com/user-attachments/assets/b0de4823-d8c2-4552-9389-a3745bc0b0cf" />
 </div>
 
 ## O que você precisa antes de "rodar" nosso projeto
@@ -99,17 +99,19 @@ O projeto está organizado em pastas que separam responsabilidades como interfac
 ```
 CP01-Cross-Platform-Application-2026-03-25/
 │
+├── backend
 ├── components
 ├── Css
 ├── hook
-├── Ideas - leyout
 ├── imgs
 ├── pages
+├── services
 │
 ├── App.js
 ├── index.js
 ├── app.json
-└── package.json
+├── package.json
+└── vercel.json
 ```
 
 ### Estrutura da navegação
@@ -122,26 +124,39 @@ Aplicativo
 
 ### Hooks utilizados
 <p>
-  <strong>{useEffect}</strong> Este hook automatiza o estado de carregamento da aplicação através de um temporizador inteligente.
+Após as atualizações em nosso aplicativo, os hooks se multiplicaram.<br>
+Atualmente estamos utilizando <strong>{useState}</strong>, <strong>{useEffect}</strong> e <strong>{useRef}</strong>. Estes hooks estão presentes em diferentes partes do nosso projeto.
 </p>
-
-```
-import { useState, useEffect } from 'react';
-
-export const useAppLoader = (duration = 5000) => {
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoaded(true);
-    }, duration);
-
-    return () => clearTimeout(timer);
-  }, [duration]);
-
-  return isLoaded;
-};
-```
+<p>
+  <strong>{useState}</strong>:
+  <ul>
+    <li>CadastroScreen.js: user, password, loading</li>
+    <li>LoginScreen.js: user, password, loading</li>
+    <li>TocandoAgora.js: songs, search, playingId, isPlaying, currentTrack, error</li>
+    <li>App.js: isLoggedIn, isRegistering, registeredUser, selectedFloor, selectedGenre, showNowPlaying</li>
+    <li>useAppLoader.js: isLoaded</li>
+  </ul>
+</p>
+<p>
+  <strong>{useEffect}</strong>:
+  <ul>
+    <li>LoadingScreen.js: Para iniciar as animações (ripple, flow, matrix)</li>
+    <li>FloorButton (em SelecionandoAsala.js): Para a animação de entrada dos botões de andar</li>
+    <li>TocandoAgora.js: songs, search, playingId, isPlaying, currentTrack, error</li>
+    <li>TocandoAgora.js: Para controlar a animação do item em reprodução, e para carregar a playlist e gerenciar o player</li>
+    <li>VibeSelectionScreen.js: Para a animação de fade-in da tela</li>
+    <li>useAppLoader.js: Para controlar o tempo de carregamento do aplicativo</li>
+  </ul>
+</p>
+<p>
+  <strong>{useRef}</strong>:
+  <ul>
+    <li>LoadingScreen.js: rippleAnim, flowAnim, matrixAnims (para as referências das animações).</li>
+    <li>FloorButton (em SelecionandoAsala.js): animatedValue, hoverValue, pressScale (para as referências das animações de cada botão)</li>
+    <li>TocandoAgora.js: playerRef (para a instância do player de áudio), animationsRef (para armazenar as animações de cada item da lista)</li>
+    <li>VibeSelectionScreen.js: fadeAnim (para a referência da animação de fade-in)</li>
+  </ul>
+</p>
 
 ## Melhorias
 <p>
@@ -153,15 +168,14 @@ export const useAppLoader = (duration = 5000) => {
   </ul>
 </p>
 
-##
-<p align="center">
-  <em>Desenvolvido por:</em><br>
-  <em>Pedro Henrique Lisboa, Felipe Rodrigues Ribeiro dos Santos, Gabriel Jorge Coutinho, Bruna Marques e Queiroz, Manoela Oliveira Bello</em>
-</p>
-
-
 ## Atulizações
  - 1-Múscia tocando;
  - 2-Barra de busca de cada musica por andar;
  - 3-Ao dar play na musica, no footer do app mostra qual música está tocando;
  - 4-No card, a múscia que estiver tocand ovai ter uma animação de som se movimentando
+
+##
+<p align="center">
+  <em>Desenvolvido por:</em><br>
+  <em>Pedro Henrique Lisboa, Felipe Rodrigues Ribeiro dos Santos, Gabriel Jorge Coutinho, Bruna Marques e Queiroz, Manoela Oliveira Bello</em>
+</p>
