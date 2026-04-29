@@ -161,3 +161,4 @@ export const useAppLoader = (duration = 5000) => {
  - 1-Múscia tocando;
  - 2-Barra de busca de cada musica por andar;
  - 3-Ao dar play na musica, no footer do app mostra qual música está tocando;
+ - 4-No card, a múscia que estiver tocand ovai ter uma animação de som se movimentando
