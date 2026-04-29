@@ -20,7 +20,7 @@
     },
     {
       "song_id": 2,
-      "title": "On Eon",
+      "title": "On & On",
       "artist": "Cartoon",
       "path": "music/Eletronico/oneon.mp3",
       "genre": "eletronico",
@@ -29,7 +29,7 @@
     },
     {
       "song_id": 2,
-      "title": "On Eon",
+      "title": "On & On",
       "artist": " Cartoon",
       "path": "music/Eletronico/oneon.mp3",
       "genre": "eletronico",
@@ -65,11 +65,11 @@
     },
     {
       "song_id": 2,
-      "title": "On Eon",
+      "title": "On & On",
       "artist": "Artist B",
       "path": "music/Eletronico/oneon.mp3",
       "genre": "eletronico",
-      "likes": 0,
+      "likes": 1,
       "playlist_id": "b80ec69e-fa0f-4880-9b61-245b76749fa6"
     },
     {
@@ -78,7 +78,7 @@
       "artist": "Artist K",
       "path": "music/Sertanejo/olhomarrom.mp3",
       "genre": "sertanejo",
-      "likes": 1,
+      "likes": 2,
       "playlist_id": "af85122b-141f-43a1-910f-7f3f9778c3e5"
     },
     {
@@ -186,7 +186,7 @@
     },
     {
       "song_id": 2,
-      "title": "On Eon",
+      "title": "On & On",
       "artist": "Artist B",
       "path": "music/Eletronico/oneon.mp3",
       "genre": "eletronico",
@@ -226,7 +226,7 @@
     },
     {
       "song_id": 2,
-      "title": "On Eon",
+      "title": "On & On",
       "artist": "Artist B",
       "path": "music/Eletronico/oneon.mp3",
       "genre": "eletronico",
