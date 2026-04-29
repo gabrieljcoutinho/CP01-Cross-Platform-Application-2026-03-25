@@ -40,7 +40,7 @@
       "song_id": 11,
       "title": "Me Amar Amanhã",
       "artist": "Mateus e Kaun",
-      "path": "music/Sertanejo/meamaramanha.mp3",
+      "path": "music/Sertanejo/pornossosfilhos.mp3",
       "genre": "sertanejo",
       "likes": 0,
       "playlist_id": "7bd3af91-42a1-44e2-ad8a-540e783b67a3"
@@ -134,7 +134,7 @@
       "song_id": 12,
       "title": "Olho Marrom",
       "artist": "Artist K",
-      "path": "music/Sertanejo/olhomarrom.mp3",
+      "path": "music/Sertanejo/pornossosfilhos.mp3",
       "genre": "sertanejo",
       "likes": 1,
       "playlist_id": "c42899fa-ab4b-4d82-9f1f-f2cf9693195a"
@@ -154,10 +154,19 @@
       "song_id": 12,
       "title": "Olho Marrom",
       "artist": "Artist K",
-      "path": "music/Sertanejo/olhomarrom.mp3",
+      "path": "music/Sertanejo/pornossosfilhos.mp3",
       "genre": "sertanejo",
       "likes": 1,
       "playlist_id": "6f74344b-13c7-4446-af94-728d6057c490"
+    },
+    {
+      "song_id": 12,
+      "title": "Olho Marrom",
+      "artist": "Artist K",
+      "path": "music/Sertanejo/olhomarrom.mp3",
+      "genre": "sertanejo",
+      "likes": 0,
+      "playlist_id": "00b3ed86-ee78-4d7e-97e7-81ed0fed7612"
     }
   ],
   "5": [
@@ -223,7 +232,7 @@
       "song_id": 11,
       "title": "Me Amar Amanhã",
       "artist": "Artist G",
-      "path": "music/Sertanejo/meamaramanha.mp3",
+      "path": "music/Sertanejo/pornossosfilhos.mp3",
       "genre": "sertanejo",
       "likes": 0,
       "playlist_id": "420e359e-bab7-429c-81b1-4424d44eb8a9"
