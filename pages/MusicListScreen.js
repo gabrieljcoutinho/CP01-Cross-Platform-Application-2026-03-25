@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, FlatList, SafeAreaView, StatusBar, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import musicDatabase from '../music/music.json';
+import musicDatabase from '../backend/music/music.json';
 import { API_URL } from "../services/api";
 
 export default function MusicListScreen({ genre, floor, onMusicAdded, onBack }) {

@@ -120,6 +120,15 @@
       "genre": "rock",
       "likes": 1,
       "playlist_id": "33805393-39ff-419c-85f1-fb8466392390"
+    },
+    {
+      "song_id": 12,
+      "title": "Olho Marrom",
+      "artist": "Artist K",
+      "path": "music/Sertanejo/olhomarrom.mp3",
+      "genre": "sertanejo",
+      "likes": 0,
+      "playlist_id": "c42899fa-ab4b-4d82-9f1f-f2cf9693195a"
     }
   ],
   "4": [
