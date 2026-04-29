@@ -80,6 +80,15 @@
       "genre": "sertanejo",
       "likes": 1,
       "playlist_id": "af85122b-141f-43a1-910f-7f3f9778c3e5"
+    },
+    {
+      "song_id": 10,
+      "title": "I Am Mine",
+      "artist": "Artist J",
+      "path": "music/Rock/iammine.mp3",
+      "genre": "rock",
+      "likes": 0,
+      "playlist_id": "b00cf6a0-a6a9-4a2f-b735-84b6dacd21da"
     }
   ],
   "2": [
