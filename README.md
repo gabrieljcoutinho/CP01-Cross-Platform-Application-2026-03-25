@@ -155,3 +155,9 @@ export const useAppLoader = (duration = 5000) => {
   <em>Desenvolvido por:</em><br>
   <em>Pedro Henrique Lisboa, Felipe Rodrigues Ribeiro dos Santos, Gabriel Jorge Coutinho, Bruna Marques e Queiroz, Manoela Oliveira Bello</em>
 </p>
+
+
+## Atulizações
+ - 1-Múscia tocando;
+ - 2-Barra de busca de cada musica por andar;
+ - 3-Ao dar play na musica, no footer do app mostra qual música está tocando;
