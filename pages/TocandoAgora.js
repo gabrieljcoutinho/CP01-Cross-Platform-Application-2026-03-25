@@ -4,17 +4,17 @@ import { Ionicons } from '@expo/vector-icons';
 import * as S from '../Css/stylesTocandoAgora';
 import { API_URL } from "../services/api";
 
-// Controle local para evitar múltiplos likes na mesma sessão
+// Evita múltiplos likes na mesma sessão
 const sessionLikes = new Set();
 
-// ── Utilitário: monta URI sem barra dupla ──────────────────────────────────────
+// Monta URL corretamente
 const buildUri = (base, path) => {
   const cleanBase = base.endsWith('/') ? base.slice(0, -1) : base;
   const cleanPath = path.startsWith('/') ? path : `/${path}`;
   return `${cleanBase}${cleanPath}`;
 };
 
-// ── Player unificado ───────────────────────────────────────────────────────────
+// Player unificado
 const createPlayer = async (uri, onFinish) => {
   if (Platform.OS === 'web') {
     const audio = new window.Audio();
@@ -38,13 +38,17 @@ const createPlayer = async (uri, onFinish) => {
   }
 
   const { Audio } = await import('expo-av');
+
   await Audio.setAudioModeAsync({
     allowsRecordingIOS: false,
     staysActiveInBackground: true,
     playsInSilentModeIOS: true,
   });
 
-  const { sound } = await Audio.Sound.createAsync({ uri }, { shouldPlay: true });
+  const { sound } = await Audio.Sound.createAsync(
+    { uri },
+    { shouldPlay: true }
+  );
 
   sound.setOnPlaybackStatusUpdate((status) => {
     if (status.didJustFinish) onFinish();
@@ -63,16 +67,18 @@ export default function PlaylistScreen({ floor, onBack, onAddMusic }) {
   const [search, setSearch] = useState('');
   const [playingId, setPlayingId] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTrack, setCurrentTrack] = useState(null);
   const [error, setError] = useState(null);
+
   const playerRef = useRef(null);
 
-  // ── Filtrar músicas ─────────────────────────────────────────────────────────
+  // Filtro
   const filteredSongs = songs.filter((item) => {
     const text = `${item.title} ${item.artist} ${item.genre}`.toLowerCase();
     return text.includes(search.toLowerCase());
   });
 
-  // ── Carrega playlist ────────────────────────────────────────────────────────
+  // Carrega playlist
   const loadPlaylist = async () => {
     try {
       const response = await fetch(`${API_URL}/playlist/${floor}`);
@@ -85,12 +91,13 @@ export default function PlaylistScreen({ floor, onBack, onAddMusic }) {
 
   useEffect(() => {
     loadPlaylist();
+
     return () => {
       playerRef.current?.unloadAsync();
     };
   }, [floor]);
 
-  // ── Play / Pause ────────────────────────────────────────────────────────────
+  // Play/Pause
   const handlePlay = async (item) => {
     setError(null);
 
@@ -117,19 +124,38 @@ export default function PlaylistScreen({ floor, onBack, onAddMusic }) {
       const player = await createPlayer(uri, () => {
         setPlayingId(null);
         setIsPlaying(false);
+        setCurrentTrack(null);
       });
+
       playerRef.current = player;
       setPlayingId(item.playlist_id);
       setIsPlaying(true);
+      setCurrentTrack(item);
+
     } catch (err) {
       console.error("Erro ao reproduzir:", err);
       setError(`Não foi possível reproduzir "${item.title}".`);
       setPlayingId(null);
       setIsPlaying(false);
+      setCurrentTrack(null);
     }
   };
 
-  // ── Like ────────────────────────────────────────────────────────────────────
+  const handlePause = async () => {
+    if (playerRef.current) {
+      await playerRef.current.pauseAsync();
+      setIsPlaying(false);
+    }
+  };
+
+  const handleResume = async () => {
+    if (playerRef.current) {
+      await playerRef.current.playAsync();
+      setIsPlaying(true);
+    }
+  };
+
+  // Like
   const handleLike = async (playlistId) => {
     if (sessionLikes.has(playlistId)) return;
 
@@ -155,7 +181,6 @@ export default function PlaylistScreen({ floor, onBack, onAddMusic }) {
 
       <S.Title>🎧 {floor}º andar</S.Title>
 
-      {/* 🔍 INPUT DE BUSCA */}
       <S.SearchInput
         placeholder="Buscar música, artista ou gênero..."
         placeholderTextColor="#888"
@@ -179,7 +204,7 @@ export default function PlaylistScreen({ floor, onBack, onAddMusic }) {
         data={filteredSongs}
         keyExtractor={(item) => String(item.playlist_id)}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 100 }}
+        contentContainerStyle={{ paddingBottom: 120 }}
         renderItem={({ item }) => {
           const isCurrentTrack = playingId === item.playlist_id;
 
@@ -221,6 +246,44 @@ export default function PlaylistScreen({ floor, onBack, onAddMusic }) {
         }}
       />
 
+      {/* MINI PLAYER */}
+      {currentTrack && (
+        <View style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: 70,
+          backgroundColor: '#121212',
+          borderTopWidth: 1,
+          borderTopColor: 'rgba(255,255,255,0.1)',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          paddingHorizontal: 15,
+        }}>
+          <View style={{ flex: 1 }}>
+            <Text style={{ color: '#fff', fontWeight: 'bold' }}>
+              {currentTrack.title}
+            </Text>
+            <Text style={{ color: '#aaa', fontSize: 12 }}>
+              {currentTrack.artist}
+            </Text>
+          </View>
+
+          <TouchableOpacity
+            onPress={isPlaying ? handlePause : handleResume}
+          >
+            <Ionicons
+              name={isPlaying ? 'pause' : 'play'}
+              size={28}
+              color="#ed145b"
+            />
+          </TouchableOpacity>
+        </View>
+      )}
+
+      {/* BOTÃO ADD */}
       <TouchableOpacity
         style={{
           width: 60,
@@ -230,13 +293,14 @@ export default function PlaylistScreen({ floor, onBack, onAddMusic }) {
           alignItems: "center",
           justifyContent: "center",
           alignSelf: "center",
-          marginBottom: 35,
+          marginBottom: 100,
           elevation: 10,
         }}
         onPress={onAddMusic}
       >
         <Ionicons name="add" size={35} color="#fff" />
       </TouchableOpacity>
+
     </S.Container>
   );
 }
