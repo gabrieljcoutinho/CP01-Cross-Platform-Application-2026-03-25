@@ -7,16 +7,36 @@ import { API_URL } from "../services/api";
 // Controle local para evitar múltiplos likes na mesma sessão
 const sessionLikes = new Set();
 
+// ── Utilitário: monta URI sem barra dupla ──────────────────────────────────────
+const buildUri = (base, path) => {
+  const cleanBase = base.endsWith('/') ? base.slice(0, -1) : base;
+  const cleanPath = path.startsWith('/') ? path : `/${path}`;
+  return `${cleanBase}${cleanPath}`;
+};
+
 // ── Player unificado: web usa HTMLAudioElement, nativo usa expo-av ─────────────
 const createPlayer = async (uri, onFinish) => {
   if (Platform.OS === 'web') {
-    const audio = new window.Audio(uri);
+    const audio = new window.Audio();
+
+    // Aguarda o áudio estar pronto antes de tentar reproduzir
+    await new Promise((resolve, reject) => {
+      audio.oncanplaythrough = resolve;
+      audio.onerror = () => {
+        const msg = audio.error?.message || 'Formato não suportado ou URL inválida';
+        reject(new Error(`Falha ao carregar áudio: ${msg}`));
+      };
+      audio.src = uri;
+      audio.load();
+    });
+
     audio.onended = onFinish;
     await audio.play();
+
     return {
-      pauseAsync: () => audio.pause(),
-      playAsync:  () => audio.play(),
-      stopAsync:  () => { audio.pause(); audio.currentTime = 0; },
+      pauseAsync:  () => audio.pause(),
+      playAsync:   () => audio.play(),
+      stopAsync:   () => { audio.pause(); audio.currentTime = 0; },
       unloadAsync: () => { audio.pause(); audio.src = ''; },
     };
   }
@@ -44,6 +64,7 @@ export default function PlaylistScreen({ floor, onBack, onAddMusic }) {
   const [songs, setSongs]         = useState([]);
   const [playingId, setPlayingId] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [error, setError]         = useState(null);
   const playerRef                 = useRef(null);
 
   // ── Carrega playlist ────────────────────────────────────────────────────────
@@ -66,6 +87,8 @@ export default function PlaylistScreen({ floor, onBack, onAddMusic }) {
 
   // ── Play / Pause ────────────────────────────────────────────────────────────
   const handlePlay = async (item) => {
+    setError(null);
+
     // Mesma música → toggle play/pause
     if (playingId === item.playlist_id && playerRef.current) {
       if (isPlaying) {
@@ -85,7 +108,8 @@ export default function PlaylistScreen({ floor, onBack, onAddMusic }) {
       playerRef.current = null;
     }
 
-    const uri = `${API_URL}/${item.path}`;
+    const uri = buildUri(API_URL, item.path);
+    console.log("Reproduzindo URI:", uri); // útil para debug — remova em produção
 
     try {
       const player = await createPlayer(uri, () => {
@@ -97,6 +121,9 @@ export default function PlaylistScreen({ floor, onBack, onAddMusic }) {
       setIsPlaying(true);
     } catch (err) {
       console.error("Erro ao reproduzir:", err);
+      setError(`Não foi possível reproduzir "${item.title}". Verifique o formato do arquivo ou a conexão.`);
+      setPlayingId(null);
+      setIsPlaying(false);
     }
   };
 
@@ -123,9 +150,22 @@ export default function PlaylistScreen({ floor, onBack, onAddMusic }) {
 
       <S.Title>🎧 {floor}º andar</S.Title>
 
+      {/* Mensagem de erro de reprodução */}
+      {error && (
+        <View style={{
+          backgroundColor: '#3a0010',
+          borderRadius: 8,
+          padding: 10,
+          marginHorizontal: 16,
+          marginBottom: 8,
+        }}>
+          <Text style={{ color: '#ff6b8a', fontSize: 13 }}>{error}</Text>
+        </View>
+      )}
+
       <FlatList
         data={songs}
-        keyExtractor={(item) => item.playlist_id}
+        keyExtractor={(item) => String(item.playlist_id)}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 100 }}
         renderItem={({ item }) => {
